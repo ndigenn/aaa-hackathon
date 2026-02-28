@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useEffect } from "react";
+import Link from "next/link";
 
 type ChatMessage = {
     id: string;
@@ -133,21 +134,38 @@ export default function ChatPage() {
                     </section>
                 </main>
 
-                {/* BOTTOM NAVBAR */}
-                <nav className="fixed bottom-0 left-0 right-0 border-t border-amber-900/30 bg-white/70 backdrop-blur-sm">
-                    <div className="mx-auto flex max-w-5xl items-center justify-around px-4 py-3 text-amber-900">
-                        <a className="font-semibold hover:underline" href="/gacha">
-                            Gacha
-                        </a>
-                        <a className="font-semibold hover:underline" href="/inventory">
-                            Inventory
-                        </a>
-                        <a className="font-semibold hover:underline" href="/chat">
+                <nav className="fixed inset-x-0 bottom-0 px-4 pb-6">
+                    <div className="mx-auto grid max-w-xl grid-cols-5 items-end gap-2 rounded-2xl border border-[#f0c779]/25 bg-[linear-gradient(180deg,rgba(90,53,30,0.95)_0%,rgba(65,35,20,0.95)_100%)] p-3 shadow-[0_10px_35px_rgba(20,8,4,0.55)] backdrop-blur">
+                        <Link
+                            href="/home"
+                            className="rounded-xl border border-[#c49558]/25 bg-[#5d3824] px-2 py-2 text-center text-sm font-medium text-[#f7dfb3] hover:bg-[#6d4430]"
+                        >
+                            Home
+                        </Link>
+                        <Link
+                            href="/cards"
+                            className="rounded-xl border border-[#c49558]/25 bg-[#5d3824] px-2 py-2 text-center text-sm font-medium text-[#f7dfb3] hover:bg-[#6d4430]"
+                        >
+                            Card
+                        </Link>
+                        <Link
+                            href="/summon"
+                            className="rounded-xl border border-[#c49558]/25 bg-[#5d3824] px-2 py-2 text-center text-sm font-medium text-[#f7dfb3] hover:bg-[#6d4430]"
+                        >
+                            Summon
+                        </Link>
+                        <Link
+                            href="/chat"
+                            className="rounded-xl border border-[#ffe3a8] bg-[linear-gradient(180deg,#f8d787_0%,#d9aa49_100%)] px-2 py-3 text-center text-sm font-extrabold text-[#4f3018] shadow-[0_0_18px_rgba(237,185,84,0.35)] hover:brightness-105"
+                        >
                             Chat
-                        </a>
-                        <a className="font-semibold hover:underline" href="/profile">
-                            Profile
-                        </a>
+                        </Link>
+                        <Link
+                            href="/shop"
+                            className="rounded-xl border border-[#c49558]/25 bg-[#5d3824] px-2 py-2 text-center text-sm font-medium text-[#f7dfb3] hover:bg-[#6d4430]"
+                        >
+                            Shop
+                        </Link>
                     </div>
                 </nav>
             </div>
