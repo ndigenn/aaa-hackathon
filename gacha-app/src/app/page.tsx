@@ -71,7 +71,7 @@ export default function Home() {
 
         <div className="pointer-events-none absolute bottom-8 left-5 hidden items-center gap-2 rounded-full border border-[#ffcd7b]/35 bg-[#28150c]/75 px-3 py-1.5 text-xs uppercase tracking-[0.17em] text-[#ffdf9f] shadow-[0_0_18px_rgba(255,174,62,0.2)] sm:flex md:left-10">
           <span className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-[#ffb547]" />
-          Live Summon Atmosphere
+          Western Education
         </div>
 
         <div className="pointer-events-none absolute right-6 top-28 flex h-16 w-16 animate-[spin_10s_linear_infinite] items-center justify-center rounded-full border border-[#ffde9e]/65 bg-[radial-gradient(circle,#ffd89a_0%,#b6782c_100%)] text-sm font-black text-[#4f2a12] shadow-[0_0_24px_rgba(251,186,88,0.45)] sm:right-10 sm:top-24">
