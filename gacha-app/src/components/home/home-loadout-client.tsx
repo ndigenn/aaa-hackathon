@@ -76,11 +76,11 @@ export default function HomeLoadoutClient({
                     setActiveSlot(index);
                   }
                 }}
-                className="group relative flex min-h-[112px] cursor-pointer items-center gap-4 rounded-xl border border-[#f0c67a]/40 bg-[#3a281b]/35 px-4 py-3 text-left transition hover:border-[#f6d491]/80 hover:bg-[#493022]/45"
+                className="group relative flex h-[122px] cursor-pointer items-center gap-4 rounded-xl border border-[#f0c67a]/40 bg-[#3a281b]/35 px-4 py-3 text-left transition hover:border-[#f6d491]/80 hover:bg-[#493022]/45"
               >
                 {card ? (
                   <>
-                    <div className="h-20 w-14 overflow-hidden rounded-md border border-[#f3cd86]/60 bg-[#2a1b12]">
+                    <div className="h-20 w-14 shrink-0 overflow-hidden rounded-md border border-[#f3cd86]/60 bg-[#2a1b12]">
                       <Image
                         src={card.imageSrc}
                         alt={card.name}
@@ -89,8 +89,8 @@ export default function HomeLoadoutClient({
                         className="h-full w-full object-contain p-1"
                       />
                     </div>
-                    <div>
-                      <p className="text-base font-bold text-[#ffe8b8]">{card.name}</p>
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-bold text-[#ffe8b8]">{card.name}</p>
                       <p className="text-xs uppercase tracking-[0.12em] text-[#f4cd84]">
                         {card.rarity} • {card.type}
                       </p>
@@ -101,7 +101,7 @@ export default function HomeLoadoutClient({
                         event.stopPropagation();
                         clearSlot(index);
                       }}
-                      className="ml-auto rounded-md border border-[#f0c67a]/45 px-2 py-1 text-xs font-semibold text-[#f3d3a1] transition hover:bg-[#57372a]/70"
+                      className="ml-auto shrink-0 rounded-md border border-[#f0c67a]/45 px-2 py-1 text-xs font-semibold text-[#f3d3a1] transition hover:bg-[#57372a]/70"
                     >
                       Clear
                     </button>
