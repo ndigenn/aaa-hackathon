@@ -113,10 +113,11 @@ export async function getTopNavProfile(returnToPath: string) {
       : Array.isArray(ownedCardIdsRaw)
         ? ownedCardIdsRaw.map(String)
         : [];
+  const normalizedOwnedCardIds = ownedCardIds.filter((cardId) => cardId.length > 0);
 
   return {
     username,
     coins: Number.isFinite(coins) ? coins : 0,
-    ownedCardIds,
+    ownedCardIds: normalizedOwnedCardIds,
   };
 }
