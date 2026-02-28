@@ -52,3 +52,11 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - `src/components/summon/summon-banners.tsx` now dispatches `summon:music-duck` with `{ ducked: true }` when summon starts, and restores with `{ ducked: false }` on summon failure, reveal close, voice-line end/error, and unmount cleanup.
   - `src/components/summon/summon-audio.tsx` listens for `summon:music-duck` and adjusts BGM volume from `0.22` (normal) to `0.10` (ducked).
 - Validation: `npm run lint` passes.
+- Duplicate summon refund implemented:
+  - Added `DUPLICATE_SUMMON_REFUND = 500` and `DUPLICATE_SUMMON_COST = 500` in `src/lib/summon.ts`.
+  - Summon now checks whether the drawn card is already owned (`ownedCardIds` list or set).
+  - Duplicate pull path deducts only 500 coins and does not re-add the card.
+  - Non-duplicate path remains 1000 coins and adds card to ownership.
+  - Response now includes `refundedCoins` and `isDuplicate` for duplicate pulls.
+- Summon reveal UI now displays duplicate refund text when applicable.
+- Validation: `npm run lint` passes.

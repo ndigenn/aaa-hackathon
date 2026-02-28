@@ -28,6 +28,8 @@ type SummonResult = {
   };
   remainingCoins: number;
   cost: number;
+  refundedCoins?: number;
+  isDuplicate?: boolean;
 };
 
 const SUMMON_BANNERS: SummonBanner[] = [
@@ -288,6 +290,11 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
                       -{summonResult.cost.toLocaleString()} coins •{" "}
                       {summonResult.remainingCoins.toLocaleString()} remaining
                     </p>
+                    {summonResult.refundedCoins ? (
+                      <p className="mt-1 text-xs font-semibold text-[#ffe8b8]">
+                        Duplicate pull refund: +{summonResult.refundedCoins.toLocaleString()} coins
+                      </p>
+                    ) : null}
                   </motion.div>
                 ) : null}
               </div>
