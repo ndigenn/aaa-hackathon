@@ -83,7 +83,7 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
   }, []);
 
   return (
-    <main className="relative min-h-screen bg-[url('/newcardsbg.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
+    <main className="relative min-h-screen bg-[url('/card_b.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
       <AppTopNav username={username} coins={coins} />
 
       <section className="relative mx-auto w-full max-w-[58rem] pt-32">
