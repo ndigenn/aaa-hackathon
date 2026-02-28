@@ -66,3 +66,10 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Non-duplicate path continues to charge full cost and add card ownership.
   - Expanded profile scan fallback to also accept lowercase `profile` SK variants.
 - Validation: `npm run lint` passes.
+- Summon duplicate refund hotfix (second pass):
+  - Added a robust scan+put summon write path in `src/lib/summon.ts`.
+  - If a profile record is found via scan, summon logic now computes duplicate status and cost in code, then writes back with `PutCommand` using the discovered record shape.
+  - This bypasses DynamoDB key-shape/update-expression edge cases that were still causing generic summon failures on duplicate pulls.
+  - Duplicate behavior: charge 500, keep ownership unchanged.
+  - Non-duplicate behavior: charge 1000, append/add ownership.
+- Validation: `npm run lint` passes.

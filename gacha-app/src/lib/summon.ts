@@ -2,6 +2,7 @@ import cardsData from "@/app/cards.json";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
   DynamoDBDocumentClient,
+  PutCommand,
   ScanCommand,
   UpdateCommand,
 } from "@aws-sdk/lib-dynamodb";
@@ -45,12 +46,13 @@ const cardsById = new Map<string, CardDefinition>(
   cardDefinitions.map((card) => [card.id, card]),
 );
 
-type UserRecord = {
+type UserRecord = Record<string, unknown> & {
   PK?: string;
   SK?: string;
   id?: string;
   userId?: string;
   sub?: string;
+  coins?: number;
   ownedCardIds?: string[] | Set<string>;
 };
 
@@ -350,6 +352,80 @@ function buildInsufficientCoinsError(requiredCoins: number) {
   );
 }
 
+function parseCoins(rawCoins: unknown) {
+  const parsed = Number(rawCoins ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function addOwnedCardId(
+  ownedCardIds: UserRecord["ownedCardIds"],
+  drawnCardId: string,
+): UserRecord["ownedCardIds"] {
+  if (ownedCardIds instanceof Set) {
+    const next = new Set([...ownedCardIds].map(String));
+    next.add(drawnCardId);
+    return next;
+  }
+
+  if (Array.isArray(ownedCardIds)) {
+    const next = [...ownedCardIds.map(String)];
+    if (!next.includes(drawnCardId)) {
+      next.push(drawnCardId);
+    }
+    return next;
+  }
+
+  return [drawnCardId];
+}
+
+async function runSummonViaPut(
+  client: DynamoDBDocumentClient,
+  record: UserRecord,
+  drawnCard: SummonCard,
+  nowIso: string,
+) {
+  if (!tableName) {
+    throw new SummonError(
+      "DB_CONFIG_MISSING",
+      "Server storage is not configured for summons.",
+    );
+  }
+
+  const ownedCardIds = getOwnedCardIdSet(record);
+  const isDuplicatePull = ownedCardIds.has(drawnCard.id);
+  const summonCost = isDuplicatePull ? DUPLICATE_SUMMON_COST : SINGLE_SUMMON_COST;
+  const currentCoins = parseCoins(record.coins);
+
+  if (currentCoins < summonCost) {
+    throw buildInsufficientCoinsError(summonCost);
+  }
+
+  const updatedRecord: UserRecord = {
+    ...record,
+    coins: currentCoins - summonCost,
+    updatedAt: nowIso,
+  };
+
+  if (!isDuplicatePull) {
+    updatedRecord.ownedCardIds = addOwnedCardId(record.ownedCardIds, drawnCard.id);
+  }
+
+  await client.send(
+    new PutCommand({
+      TableName: tableName,
+      Item: updatedRecord,
+    }),
+  );
+
+  return {
+    card: drawnCard,
+    remainingCoins: updatedRecord.coins,
+    cost: summonCost,
+    refundedCoins: isDuplicatePull ? DUPLICATE_SUMMON_REFUND : 0,
+    isDuplicate: isDuplicatePull,
+  };
+}
+
 export async function runSingleSummonForUser(
   userId: string,
   bannerId: BannerId,
@@ -369,6 +445,11 @@ export async function runSingleSummonForUser(
     SK: "PROFILE",
   };
   const fallbackRecord = await findUserRecord(client, userId);
+
+  if (fallbackRecord) {
+    return runSummonViaPut(client, fallbackRecord, drawnCard, nowIso);
+  }
+
   const isDuplicatePull = getOwnedCardIdSet(fallbackRecord).has(drawnCard.id);
   const summonCost = isDuplicatePull ? DUPLICATE_SUMMON_COST : SINGLE_SUMMON_COST;
 
