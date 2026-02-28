@@ -19,11 +19,11 @@ const NAV_ITEMS: { href: NavHref; label: string; icon: string }[] = [
 ];
 
 const baseItemClass =
-  "group relative flex min-h-[68px] flex-col items-center justify-center gap-1 rounded-xl border px-1.5 py-2 text-center text-xs font-bold uppercase tracking-[0.05em] leading-none transition-all duration-200 sm:text-[11px]";
-const inactiveItemClass = `${baseItemClass} border-[#cc9a59]/28 bg-[linear-gradient(180deg,rgba(94,56,31,0.88)_0%,rgba(62,35,20,0.92)_100%)] text-[#f7ddb0] hover:-translate-y-0.5 hover:border-[#efbf78]/55 hover:bg-[linear-gradient(180deg,rgba(110,66,37,0.92)_0%,rgba(74,43,25,0.94)_100%)]`;
-const activeItemClass = `${baseItemClass} border-[#ffd995]/95 bg-[linear-gradient(180deg,#ffe2a9_0%,#d89d41_100%)] text-[#4c2a13] shadow-[0_0_18px_rgba(237,185,84,0.35)]`;
+  "group relative flex min-h-[74px] flex-col items-center justify-end gap-1 rounded-2xl border px-1.5 pb-1.5 pt-2 text-center leading-none transition-all duration-200";
+const inactiveItemClass = `${baseItemClass} border-[#ca9a5b]/30 bg-[linear-gradient(180deg,rgba(96,54,31,0.88)_0%,rgba(66,36,20,0.92)_100%)] hover:-translate-y-0.5 hover:border-[#efbf78]/55 hover:bg-[linear-gradient(180deg,rgba(112,65,38,0.9)_0%,rgba(77,44,26,0.92)_100%)]`;
+const activeItemClass = `${baseItemClass} border-[#ffd995]/95 bg-[linear-gradient(180deg,#ffe2ad_0%,#d59a3e_100%)] shadow-[0_0_18px_rgba(237,185,84,0.35)]`;
 const summonItemClass =
-  "group relative -translate-y-5 flex h-[94px] w-full items-center justify-center rounded-full bg-transparent transition-transform duration-200 hover:-translate-y-6";
+  "group relative -translate-y-5 flex h-[96px] w-full items-center justify-center rounded-full bg-transparent transition-transform duration-200 hover:-translate-y-6";
 
 export default function BottomNav({ activeHref }: BottomNavProps) {
   const handleNavClick = useCallback((href: NavHref) => {
@@ -42,7 +42,8 @@ export default function BottomNav({ activeHref }: BottomNavProps) {
       <div className="mx-auto max-w-xl">
         <div className="relative">
           <div className="pointer-events-none absolute -inset-x-2 -top-3 h-16 rounded-[26px] bg-[radial-gradient(circle_at_50%_0%,rgba(248,200,106,0.25)_0%,rgba(248,200,106,0)_70%)]" />
-          <div className="grid grid-cols-5 items-end gap-2 rounded-[24px] border border-[#f0c779]/35 bg-[linear-gradient(180deg,rgba(88,50,29,0.97)_0%,rgba(52,29,17,0.98)_100%)] p-2.5 shadow-[0_14px_38px_rgba(20,8,4,0.6)] backdrop-blur">
+          <div className="pointer-events-none absolute inset-x-8 top-0 h-1 rounded-full bg-[#f4c777]/45 blur-[1px]" />
+          <div className="grid grid-cols-5 items-end gap-2 rounded-[26px] border border-[#f0c779]/35 bg-[linear-gradient(180deg,rgba(86,49,28,0.97)_0%,rgba(52,30,17,0.98)_52%,rgba(44,25,14,0.99)_100%)] p-2.5 shadow-[0_14px_38px_rgba(20,8,4,0.6)] backdrop-blur">
             {NAV_ITEMS.map((item) => {
               const isSummon = item.href === "/summon";
               const isActive = item.href === activeHref;
@@ -64,10 +65,14 @@ export default function BottomNav({ activeHref }: BottomNavProps) {
                   <div
                     className={
                       isSummon
-                        ? `relative flex h-[90px] w-[90px] items-center justify-center rounded-full border border-[#ffd792]/70 bg-[radial-gradient(circle,rgba(255,226,165,0.9)_0%,rgba(247,186,84,0.88)_48%,rgba(134,74,28,0.95)_100%)] shadow-[0_18px_34px_rgba(237,185,84,0.5)] ${
+                        ? `relative flex h-[92px] w-[92px] items-center justify-center rounded-full border border-[#ffd792]/70 bg-[radial-gradient(circle,rgba(255,226,165,0.9)_0%,rgba(247,186,84,0.88)_48%,rgba(134,74,28,0.95)_100%)] shadow-[0_18px_34px_rgba(237,185,84,0.5)] ${
                             isActive ? "ring-2 ring-[#ffe8b7]" : ""
                           }`
-                        : "relative flex h-7 w-7 items-center justify-center rounded-full bg-[#311a0f]/50"
+                        : `relative flex h-[46px] w-[46px] items-center justify-center rounded-full border ${
+                            isActive
+                              ? "border-[#ffd995]/85 bg-[#fff0cf]"
+                              : "border-[#d2a568]/45 bg-[#2c170d]/65"
+                          }`
                     }
                   >
                     <Image
@@ -79,7 +84,7 @@ export default function BottomNav({ activeHref }: BottomNavProps) {
                       className={
                         isSummon
                           ? "h-[74px] w-[74px] object-contain drop-shadow-[0_10px_16px_rgba(62,28,8,0.6)]"
-                          : "h-5.5 w-5.5 object-contain sm:h-6 sm:w-6"
+                          : "h-9 w-9 object-contain"
                       }
                     />
                     {isSummon ? (
@@ -89,7 +94,15 @@ export default function BottomNav({ activeHref }: BottomNavProps) {
                     ) : null}
                   </div>
                   {!isSummon ? (
-                    <span className={isActive ? "text-[#4b2a12]" : "text-[#f7ddb0]"}>
+                    <span
+                      className={`text-[13px] ${
+                        isActive ? "text-[#4a2a13]" : "text-[#f5ddb2]"
+                      }`}
+                      style={{
+                        fontFamily:
+                          '"Brush Script MT","Lucida Handwriting","Apple Chancery",cursive',
+                      }}
+                    >
                       {item.label}
                     </span>
                   ) : null}
