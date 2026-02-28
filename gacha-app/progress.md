@@ -114,3 +114,12 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
     - Shows `Victory!` or `Loss!`.
     - Includes `Main Menu` button and `Rematch` button.
 - Validation: `npm run lint` passes.
+- New request handled: play `battle.mp3` when battle starts.
+- Battle audio implementation:
+  - Added `src/components/battle/battle-audio.tsx` to manage battle BGM lifecycle.
+  - `battle.mp3` now autoplays (looped) on battle page mount, with first pointer/key interaction retry for autoplay-restricted browsers.
+  - Audio is cleaned up on unmount (`pause` + reset `currentTime`) so it stops when leaving battle.
+  - Mounted `BattleAudio` in `src/app/battle/page.tsx`.
+- Validation:
+  - `npm run lint` passes.
+  - Ran Playwright battle smoke via local skill client; app responded but `/battle` redirected to Auth0 login in this environment, so direct in-battle visual/audio verification remains auth-blocked.

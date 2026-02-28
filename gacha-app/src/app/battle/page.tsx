@@ -1,6 +1,7 @@
 import AppTopNav from "@/components/app-top-nav";
 import BottomNav from "@/components/bottom-nav";
 import BattlePageClient from "@/components/battle/battle-page-client";
+import BattleAudio from "@/components/battle/battle-audio";
 import { getTopNavProfile } from "@/lib/user-profile";
 import cardsData from "@/app/cards.json";
 
@@ -97,6 +98,7 @@ export default async function BattlePage({
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(12,8,6,0.56)_0%,rgba(20,10,8,0.66)_45%,rgba(25,14,9,0.84)_100%)]" />
 
       <AppTopNav username={username} coins={coins} />
+      <BattleAudio />
       <BattlePageClient
         key={`battle-${loadoutParam}`}
         availableCards={availableCards}
