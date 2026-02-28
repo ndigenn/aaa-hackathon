@@ -233,7 +233,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-sm rounded-2xl border border-[#f0c67a]/50 bg-[linear-gradient(160deg,#2c1c37_0%,#3b2248_55%,#4a2a1d_100%)] p-5 text-center shadow-[0_18px_50px_rgba(0,0,0,0.58)]"
+              className="max-h-[calc(100vh-6.5rem)] w-full max-w-sm overflow-y-auto rounded-2xl border border-[#f0c67a]/50 bg-[linear-gradient(160deg,#2c1c37_0%,#3b2248_55%,#4a2a1d_100%)] p-4 text-center shadow-[0_18px_50px_rgba(0,0,0,0.58)] sm:p-5"
               initial={{ y: 20, scale: 0.97 }}
               animate={{ y: 0, scale: 1 }}
               exit={{ y: 20, scale: 0.97 }}
@@ -246,18 +246,18 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
                 {isDrawing ? "Drawing Card..." : "Summon Complete"}
               </h3>
 
-              <div className="mt-5 flex min-h-[280px] items-center justify-center">
+              <div className="mt-4 flex min-h-[128px] items-center justify-center sm:mt-5 sm:min-h-[148px]">
                 {isDrawing ? (
                   <motion.div
-                    className="h-[240px] w-[170px] overflow-hidden rounded-xl border border-[#f4cd84]/50 shadow-[0_10px_30px_rgba(0,0,0,0.45)]"
+                    className="h-[116px] w-[112px] overflow-hidden rounded-xl border border-[#f4cd84]/50 shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:h-[126px] sm:w-[126px]"
                     animate={{ rotate: [0, -5, 5, -2, 0], y: [0, -6, 0] }}
                     transition={{ duration: 0.9, repeat: Number.POSITIVE_INFINITY }}
                   >
                     <Image
                       src="/card.png"
                       alt="Card back"
-                      width={170}
-                      height={240}
+                      width={112}
+                      height={116}
                       className="h-full w-full object-cover"
                     />
                   </motion.div>
@@ -268,12 +268,12 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
                     transition={{ duration: 0.35 }}
                     className="w-full"
                   >
-                    <div className="mx-auto h-[240px] w-[170px] overflow-hidden rounded-xl border border-[#f4cd84]/65 bg-[#2f1c3b] shadow-[0_10px_30px_rgba(0,0,0,0.45)]">
+                    <div className="mx-auto h-[116px] w-[112px] overflow-hidden rounded-xl border border-[#f4cd84]/65 bg-[#2f1c3b] shadow-[0_10px_30px_rgba(0,0,0,0.45)] sm:h-[126px] sm:w-[126px]">
                       <Image
                         src={summonResult.card.imageSrc}
                         alt={summonResult.card.name}
-                        width={170}
-                        height={240}
+                        width={112}
+                        height={116}
                         className="h-full w-full object-contain p-2"
                       />
                     </div>
