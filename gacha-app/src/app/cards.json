@@ -28,7 +28,8 @@
         }
       ],
       "imagePath": "/billie.png",
-      "voiceLinePath": "/billie.mp3"
+      "voiceLinePath": "/billie.mp3",
+      "history": "Billy the Kid (born Henry McCarty; 1859–1881) was a notorious American Old West gunfighter and outlaw in New Mexico Territory who killed several men. Known for his involvement in the Lincoln County War, he became a legendary, romanticized figure after being killed at age 21 by Sheriff Pat Garrett. \n\nBorn Henry McCarty in New York City, he moved West as a child, lost his mother early, and turned to crime as a teenager. He used many aliases, including names like William H. Bonney, Henry Antrim, and The Kid. \n\nThe Lincoln County War: He gained notoriety as a gunman during this conflict, a violent feud between mercantile factions in New Mexico dubbed the Lincoln County War. Often mythologized to have killed 21 men, he was actually responsible for about four to nine deaths.\n\nAfter being captured, convicted, and escaping, he was shot and killed by Sheriff Pat Garrett on July 14, 1881, in Fort Sumner, New Mexico. He has been the subject of over 50 movies, establishing him as a lasting icon of the American West."
     },
     {
       "id": "2",
@@ -58,7 +59,8 @@
         }
       ],
       "imagePath": "/wynne.png",
-      "voiceLinePath": "/wynne.mp3"
+      "voiceLinePath": "/wynne.mp3",
+      "history": "Wyatt Earp may be one of the most recognisable lawmen of the Old West, but his record was far from clean. Over the years, he was a pimp, a thief and a con artist; he owned saloons and gambled; and he found himself on the other side of prison bars numerous times.\n\nFrom his first law enforcement job in 1870, Earp’s career as a sheriff and deputy took him on many adventures across dangerous frontier towns. But it was undoubtedly his time in Tombstone, Arizona, where his brother Virgil was town marshal, that cemented his place in history.\n\nSpecifically, it was his role in the Gunfight at the OK Corral in 1881. The Earps, joined by their other brother Morgan and friend Doc Holliday, had been feuding with a gang of cattle rustlers and thieves calling themselves the Cowboys. The resulting gunfight allegedly lasted only 30 seconds, leaving three men dead, and Wyatt Victorious." 
     },
     {
       "id": "3",
@@ -88,7 +90,8 @@
         }
       ],
       "imagePath": "/butch.png",
-      "voiceLinePath": "/butch.mp3"
+      "voiceLinePath": "/butch.mp3",
+      "history": "Butch Cassidy was a leader of the train and bank robbers calling themselves the Wild Bunch alongside his partner Harry Longabaugh, the so-called Sundance Kid. Unlike many outlaws of the time, he had a reputation for being relatively non-violent, preferring to use smarts instead of shootouts. \n\nStill, Cassidy (whose real name was Robert LeRoy Parker) found himself pursued by Pinkerton detectives across a landscape rapidly shifting and modernising. By the late 1800s, railroads, telegraphs and federal law enforcement were concluding the lawlessness that had defined the Old West. \n\nSeeking refuge, Cassidy and the Sundance Kid fled the United States altogether and headed for South America. There, they operated a ranch in Argentina, but also slipped back into their outlaw ways."
     },
     {
       "id": "4",
@@ -118,7 +121,8 @@
         }
       ],
       "imagePath": "/jane.png",
-      "voiceLinePath": "/jane.mp3"
+      "voiceLinePath": "/jane.mp3",
+      "history": "Born Martha Jane Canary around 1852, the legendary Calamity Jane became a frontier icon. Not only was she highly skilled as a shooter and rider – in later life, she appeared in Buffalo Bill’s Wild West show – but she bucked the traditional role of women in the Old West.\n\nShe wore men’s clothing and could take care of herself. Both her parents had died when she was still a teenager, leaving her to look after her fiver younger siblings as they travelled cross country.\n\nIn adult life, Jane allegedly worked as a scout for the US Army, got involved in long-running conflicts with Native American tribes, and potentially shacked up with one of the frontier’s most revered gunslingers, Wild Bill Hickok. Their relationship would not last long: Wild Bill was shot and killed in 1876, while playing poker."
     },
     {
       "id": "5",
@@ -148,7 +152,8 @@
         }
       ],
       "imagePath": "/wildbill.png",
-      "voiceLinePath": "/wildbill.mp3"
+      "voiceLinePath": "/wildbill.mp3",
+      "history": "Born James Butler Hickok in Illinois, Hickok served in the Civil War working as a scout and spy for the Union Army, earning renown for his sharpshooting and bravery. Post-war, Hickok turned his talents to the wild frontier, where his exploits as a lawman and gambler in Kansas and Nebraska towns cemented his legendary status.\n\nRenowned for his sharpshooting and bravery, where his exploits as a lawman and gambler in Kansas and Nebraska towns cemented his legendary status.\n\nAs a marshal in Abilene, Kansas, Hickok was known for his steely nerves and deadly aim, but also for his preference to avoid violence when possible. Nevertheless, his career was punctuated by famous shootouts, including a deadly encounter in Springfield, Missouri, in 1865 where he killed David Tutt in what is often called the first “quick-draw” duel.\n\nHickok’s fame spread through dime novels and newspaper stories, which painted him as the archetype of the Old West hero. But his personal life was tumultuous. His friendship and rumoured romance with Calamity Jane added to his mystique, as did his reputation as a gambler."
     },
     {
       "id": "6",
@@ -178,7 +183,8 @@
         }
       ],
       "imagePath": "/doc.png",
-      "voiceLinePath": "/doc.mp3"
+      "voiceLinePath": "/doc.mp3",
+      "history": "John Henry ‘Doc’ Holliday was not a typical outlaw. He initially trained as a dentist in Pennsylvania, but moved to the Southwest after contracting tuberculosis. The hope was that the warm and dry climate would ease his symptoms.\n\nIt was while drifting through the frontier towns that he met Wyatt Earp. He forged a friendship with the lawman after saving his life, and followed Earp to Tombstone, Arizona, where he was a major player in the legendary Gunfight at OK Corral in 1881. He would then join Wyatt Earp on his vendetta ride against the Cowboys.\n\nWhile he maintained a deadly reputation as a gunslinger and canny gambler, much of Holliday’s life was ultimately shaped by his illness. His last years were spent receiving treatment in Colorado, before he succumbed in 1887 at the age of 36."
     },
     {
       "id": "7",
@@ -208,7 +214,8 @@
         }
       ],
       "imagePath": "/bass.png",
-      "voiceLinePath": "/bass.mp3"
+      "voiceLinePath": "/bass.mp3",
+      "history":"Born into slavery in 1838, Reeves managed to flee from his owners during the American Civil War and went to live among Native American tribes. There, he learned multiple languages and the customs of indigenous peoples, as well as the survival and tracking skills that would be so important in his career.\n\nIn 1875, Judge Isaac Parker appointed him as a Deputy U.S. Marshal, making him one of the first black officers west of the Mississippi. Despite being illiterate, he was known for his incredible memory, using it to memorize the details of the many warrants he carried. He was renowned for his expert marksmanship, disguise skills, and in his 32 years as a federal officer, Reeves reportedly killed 14 outlaws and arrested more than 3,000 people all across Oklahoma and Arkansas.\n\nPerhaps most impressively, given how ruthless and violent many of the men were that he chased down over the years, he lived to see his retirement and ended his illustrious law enforcement career as a police officer in Muskogee."
     },
     {
       "id": "8",
@@ -238,7 +245,8 @@
         }
       ],
       "imagePath": "/belle.png",
-      "voiceLinePath": "/belle.mp3"
+      "voiceLinePath": "/belle.mp3",
+      "history": "Belle Starr, born Myra Maybelle Shirley, became infamous not for large-scale robberies or shootouts, but rather for her association with outlaws.\n\nRaised in a relatively prosperous family and educated in a classical manner, Starr’s path into criminality seems to have stemmed from choice rather than necessity. After the American Civil War, during which her brother had died fighting as a bushwhacker, she became involved with the outlaws who would form the James-Younger Gang.\n\nBelle, who was a skilled shooter, would wear black velvet and a plumed hat, giving her a strong image. Yet it was after her death that her reputation truly flourished, thanks to the sensationalised nature of her apparent murder in 1889 – shot while riding home on her horse, seemingly with her own gun. The circumstances of her death remain unclear. Was she ambushed and shot by a hidden rival while riding home? Or did her own shotgun misfire?"
     },
     {
       "id": "9",
@@ -268,7 +276,8 @@
         }
       ],
       "imagePath": "/beth.png",
-      "voiceLinePath": "/beth.mp3"
+      "voiceLinePath": "/beth.mp3",
+      "history": "Charles E Boles, better known as Black Bart, was a rather unconventional outlaw. His choice of weapon was not a revolver, shotgun or rifle, but poetry. He would leave behind little verses at the scenes of his crimes.\n\nAlthough he robbed dozens of stagecoaches across California and Oregon in the 1870s and 1880s, Bart earned a reputation as a ‘gentleman bandit’. He would be polite to his victims and never resorted to violence, which distinguished him from other more bloodthirsty outlaws.\n\nThat said, his prose proves that he could sometimes stray from gentlemanly behaviour. Perhaps the most iconic of his poems reads: “I’ve labored long and hard for bread / For honor and for riches / But on my corns too long you’ve tred / You fine haired Sons of B******.” \n\nBart’s criminal career ended in 1883 when he was captured and imprisoned, following a botched robbery in which he dropped his handkerchief. This allowed Pinkerton detectives to track him down. The distinctive combination of his refined manners and poetic flair places him firmly as one of the Old West’s more eccentric figures."
     },
     {
       "id": "10",
@@ -298,7 +307,8 @@
         }
       ],
       "imagePath": "/goodnight.png",
-      "voiceLinePath": "/goodnight.mp3"
+      "voiceLinePath": "/goodnight.mp3",
+      "history": "Decidedly not an outlaw, Charles Goodnight was a legendary cowboy in the truest sense.\n\nHe was inducted into the Hall of Great Westerners for his shaping of the Old West. Most notably, he helped establish the Goodnight-Loving Trail, a major route for driving cattle from Texas to markets in New Mexico Territory. And his innovations, such as the chuck wagon (a mobile kitchen for cowboys on the trail) would transform the way that these drives operated.\n\nBut not all of Goodnight’s life was peaceful. In his earlier years, he frequently fought against the Commanche both with local militia and as a member of the Texas Rangers, before serving in the Frontier Regiment during the American Civil War.\n\nSurviving into his 90s, dying in the late-1920s, Goodnight’s reputation stretched far beyond the era of the Wild West and into the modernity of the 20th century."
     }
   ]
 }
