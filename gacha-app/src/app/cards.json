@@ -1,7 +1,7 @@
 {
   "cards": [
     {
-      "id": "card_001",
+      "id": "1",
       "name": "Billy the Kid",
       "type": "DPS",
       "rarity": "Ultra Rare",
@@ -30,7 +30,7 @@
       "imagePath": "/assets/images/cards/billy_the_kid.png"
     },
     {
-      "id": "card_002",
+      "id": "2",
       "name": "Wyatt Earp",
       "type": "Tank",
       "rarity": "Common",
@@ -59,7 +59,7 @@
       "imagePath": "/assets/images/cards/wyatt_earp.png"
     },
     {
-      "id": "card_003",
+      "id": "3",
       "name": "Butch Cassidy",
       "type": "Sub DPS",
       "rarity": "Rare",
@@ -88,7 +88,7 @@
       "imagePath": "/assets/images/cards/butch_cassidy.png"
     },
     {
-      "id": "card_004",
+      "id": "4",
       "name": "Calamity Jane",
       "type": "Sub DPS",
       "rarity": "Ultra Rare",
@@ -117,7 +117,7 @@
       "imagePath": "/assets/images/cards/calamity_jane.png"
     },
     {
-      "id": "card_005",
+      "id": "5",
       "name": "Wild Bill Hickok",
       "type": "DPS",
       "rarity": "Rare",
@@ -146,7 +146,7 @@
       "imagePath": "/assets/images/cards/wild_bill_hickok.png"
     },
     {
-      "id": "card_006",
+      "id": "6",
       "name": "Doc Holiday",
       "type": "Healer",
       "rarity": "Common",
@@ -175,7 +175,7 @@
       "imagePath": "/assets/images/cards/doc_holiday.png"
     },
     {
-      "id": "card_007",
+      "id": "7",
       "name": "Bass Reaves",
       "type": "Debuffer",
       "rarity": "Ultra Rare",
@@ -204,7 +204,7 @@
       "imagePath": "/assets/images/cards/bass_reaves.png"
     },
     {
-      "id": "card_008",
+      "id": "8",
       "name": "Belle Starr",
       "type": "DPS",
       "rarity": "Rare",
@@ -233,7 +233,7 @@
       "imagePath": "/assets/images/cards/belle_starr.png"
     },
     {
-      "id": "card_009",
+      "id": "9",
       "name": "Black Bart",
       "type": "Support",
       "rarity": "Rare",
@@ -261,7 +261,7 @@
       ]
     },
     {
-      "id": "card_010",
+      "id": "10",
       "name": "Charles Goodnight",
       "type": "Support",
       "rarity": "Common",
