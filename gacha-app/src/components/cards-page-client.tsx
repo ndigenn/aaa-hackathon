@@ -245,18 +245,39 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                           <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
                             History
                           </p>
-                          <div className="mt-3 space-y-2 text-xs text-[#efd8b0]">
-                            {getHistoryEntries(card).map((entry, index) => (
-                              <div
-                                key={`${card.id}-history-${index}`}
-                                className="rounded-md border border-white/10 bg-black/20 p-2"
+                          <div className="mt-3 flex items-center justify-between gap-2">
+                            <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
+                              Hover to view full history
+                            </span>
+                            <div
+                              className="group relative"
+                              onClick={(event) => event.stopPropagation()}
+                            >
+                              <button
+                                type="button"
+                                className="rounded-md border border-[#f2cd86]/50 bg-[#3a2348]/80 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[#ffe8b8] hover:bg-[#4a2b5f]"
                               >
-                                <p>
-                                  <span className="font-semibold">Entry:</span>{" "}
-                                  {entry}
+                                History
+                              </button>
+                              <div className="pointer-events-none invisible absolute bottom-full right-0 z-50 mb-2 w-64 max-h-56 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition group-hover:visible group-hover:opacity-100">
+                                <p className="mb-2 text-xs font-bold uppercase tracking-[0.08em] text-[#f4cd84]">
+                                  History Details
                                 </p>
+                                <div className="space-y-2 text-xs text-[#efd8b0]">
+                                  {getHistoryEntries(card).map((entry, index) => (
+                                    <div
+                                      key={`${card.id}-history-${index}`}
+                                      className="rounded-md border border-white/10 bg-black/20 p-2"
+                                    >
+                                      <p>
+                                        <span className="font-semibold">Entry:</span>{" "}
+                                        {entry}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            ))}
+                            </div>
                           </div>
                           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
                             Click to flip back
