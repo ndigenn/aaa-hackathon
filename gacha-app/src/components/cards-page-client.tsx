@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import cardsData from "../../src/app/cards.json";
 import BottomNav from "@/components/bottom-nav";
+import AppTopNav from "@/components/app-top-nav";
 
 type Card = {
   id: string;
@@ -21,13 +22,18 @@ type Card = {
   }[];
 };
 
+type CardsPageProps = {
+  username: string;
+  coins: number;
+};
+
 const CARD_IMAGE_BY_NAME: Record<string, string> = {
   "billy the kid": "/billie.png",
   "wyatt earp": "/wynne.png",
   "butch cassidy": "/sunny.png",
 };
 
-export default function CardsPage() {
+export default function CardsPage({ username, coins }: CardsPageProps) {
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const cards = cardsData.cards as Card[];
 
@@ -47,14 +53,18 @@ export default function CardsPage() {
   const getCardImageSrc = (name: string) => CARD_IMAGE_BY_NAME[name.toLowerCase()] ?? "/card.png";
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] px-4 pb-28 pt-8 text-[#f8e9c6]">
-      <section className="mx-auto w-full max-w-xl">
-        <h1 className="text-center text-3xl font-extrabold text-[#ffe8b8]">
-          My Cowgirls
-        </h1>
-        <p className="mt-2 text-center text-sm text-[#efd8b0]">
-          Click on each of your cowgirls to view their history and unlock more details about their legendary exploits across the Wild West!
-        </p>
+    <main className="relative min-h-screen bg-[url('/cardsbackground.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
+      <AppTopNav username={username} coins={coins} />
+
+      <section className="relative mx-auto w-full max-w-xl pt-32">
+        <div className="mx-auto rounded-3xl border border-[#f2cb74]/60 bg-[#4d3018]/90 px-5 py-4 shadow-[0_0_18px_rgba(255,210,120,0.2)]">
+          <h1 className="text-center text-3xl font-extrabold text-[#ffe8b8]">
+            My Cowgirls
+          </h1>
+          <p className="mt-2 text-center text-sm text-[#efd8b0]">
+            Click on each of your cowgirls to view their history and unlock more details about their legendary exploits across the Wild West!
+          </p>
+        </div>
 
         {visibleCards.length === 0 ? (
           <p className="mt-10 text-center text-sm text-[#efd8b0]">
