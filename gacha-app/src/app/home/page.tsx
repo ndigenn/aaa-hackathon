@@ -7,14 +7,18 @@ export default async function HomePage() {
   const { username, coins } = await getTopNavProfile("/home");
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] text-[#f8e9c6]">
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,215,140,0.12)_0%,rgba(91,47,26,0.2)_50%,rgba(44,26,16,0.45)_100%)]" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(180deg,rgba(122,78,44,0)_0%,rgba(93,57,31,0.55)_65%,rgba(65,36,20,0.8)_100%)]" />
+    <main className="relative min-h-screen overflow-hidden text-[#f8e9c6]">
+      <div
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/homepage.png')" }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(12,8,6,0.38)_0%,rgba(20,10,8,0.5)_45%,rgba(25,14,9,0.72)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[linear-gradient(180deg,rgba(14,8,6,0.6)_0%,rgba(14,8,6,0)_100%)]" />
 
       <AppTopNav username={username} coins={coins} />
 
       <section className="relative mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-6 pb-36 pt-28">
-        <div className="w-full rounded-2xl border border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)] p-6 shadow-[0_16px_45px_rgba(18,8,5,0.55)]">
+        <div className="w-full rounded-2xl border border-[#f0c67a]/45 bg-[linear-gradient(165deg,rgba(52,29,18,0.83)_0%,rgba(42,24,15,0.88)_50%,rgba(33,20,12,0.92)_100%)] p-6 shadow-[0_16px_45px_rgba(18,8,5,0.58)] backdrop-blur-[2px]">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.24em] text-[#f4cd84]">
             Welcome Back
           </p>
@@ -34,7 +38,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/cards"
-              className="rounded-xl border border-[#f2cd86]/40 bg-[#3a2348]/65 px-4 py-3 text-center text-sm font-extrabold uppercase tracking-[0.08em] text-[#ffe8b8] transition hover:bg-[#4b2d5f]/80"
+              className="rounded-xl border border-[#f2cd86]/45 bg-[#3a2348]/75 px-4 py-3 text-center text-sm font-extrabold uppercase tracking-[0.08em] text-[#ffe8b8] transition hover:bg-[#4b2d5f]/90"
             >
               View Cards
             </Link>

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import cardsData from "@/app/cards.json";
-import AppTopNav from "@/components/app-top-nav";
+import Image from "next/image";
+import cardsData from "../../src/app/cards.json";
 import BottomNav from "@/components/bottom-nav";
 
 type Card = {
@@ -21,15 +21,13 @@ type Card = {
   }[];
 };
 
-type CardsPageClientProps = {
-  username: string;
-  coins: number;
+const CARD_IMAGE_BY_NAME: Record<string, string> = {
+  "billy the kid": "/billie.png",
+  "wyatt earp": "/wynne.png",
+  "butch cassidy": "/sunny.png",
 };
 
-export default function CardsPageClient({
-  username,
-  coins,
-}: CardsPageClientProps) {
+export default function CardsPage() {
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const cards = cardsData.cards as Card[];
 
@@ -46,16 +44,16 @@ export default function CardsPageClient({
   });
   const visibleCards = sortedCards.filter((card) => card.unlocked);
 
+  const getCardImageSrc = (name: string) => CARD_IMAGE_BY_NAME[name.toLowerCase()] ?? "/card.png";
+
   return (
-    <main className="relative min-h-screen bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] px-4 pb-28 pt-8 text-[#f8e9c6]">
-      <AppTopNav username={username} coins={coins} />
-      <section className="mx-auto w-full max-w-xl pt-20">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] px-4 pb-28 pt-8 text-[#f8e9c6]">
+      <section className="mx-auto w-full max-w-xl">
         <h1 className="text-center text-3xl font-extrabold text-[#ffe8b8]">
           My Cowgirls
         </h1>
         <p className="mt-2 text-center text-sm text-[#efd8b0]">
-          Click on each of your cowgirls to view their history and unlock more
-          details about their legendary exploits across the Wild West!
+          Click on each of your cowgirls to view their history and unlock more details about their legendary exploits across the Wild West!
         </p>
 
         {visibleCards.length === 0 ? (
@@ -70,7 +68,9 @@ export default function CardsPageClient({
                 role="button"
                 tabIndex={0}
                 onClick={() =>
-                  setFlippedCardId((current) => (current === card.id ? null : card.id))
+                  setFlippedCardId((current) =>
+                    current === card.id ? null : card.id,
+                  )
                 }
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
@@ -84,14 +84,15 @@ export default function CardsPageClient({
                 style={{ perspective: "1200px" }}
               >
                 <div
-                  className="relative min-h-[250px] transition-transform duration-500"
+                  className="relative min-h-[400px] transition-transform duration-500"
                   style={{
                     transformStyle: "preserve-3d",
-                    transform: flippedCardId === card.id ? "rotateY(180deg)" : "none",
+                    transform:
+                      flippedCardId === card.id ? "rotateY(180deg)" : "none",
                   }}
                 >
                   <article
-                    className={`absolute inset-0 rounded-xl border p-4 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
+                    className={`absolute inset-0 flex flex-col rounded-xl border p-4 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
                       card.unlocked
                         ? "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]"
                         : "border-white/15 bg-[linear-gradient(165deg,rgba(90,90,90,0.8)_0%,rgba(70,70,70,0.88)_45%,rgba(45,45,45,0.92)_100%)] grayscale"
@@ -107,7 +108,17 @@ export default function CardsPageClient({
                     <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#f4cd84]">
                       {card.rarity} - {card.type}
                     </p>
-                    <p className="mt-3 text-sm text-[#efd8b0]">{card.description}</p>
+                    <div className="mt-5 flex flex-1 items-center justify-center">
+                      <div className="rounded-lg border-l border-r border-[#f2cd86]/45 px-5">
+                        <Image
+                          src={getCardImageSrc(card.name)}
+                          alt={`${card.name} portrait`}
+                          width={280}
+                          height={280}
+                          className="h-56 w-56 object-contain drop-shadow-[0_10px_18px_rgba(0,0,0,0.38)]"
+                        />
+                      </div>
+                    </div>
                     <div className="mt-4 flex items-center justify-between gap-2">
                       <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
                         Click card to flip
@@ -142,7 +153,9 @@ export default function CardsPageClient({
                                 </p>
                                 <p>
                                   <span className="font-semibold">Cooldown:</span>{" "}
-                                  {ability.cooldown === null ? "None" : ability.cooldown}
+                                  {ability.cooldown === null
+                                    ? "None"
+                                    : ability.cooldown}
                                 </p>
                                 <p>
                                   <span className="font-semibold">Description:</span>{" "}
@@ -157,7 +170,7 @@ export default function CardsPageClient({
                   </article>
 
                   <article
-                    className={`absolute inset-0 rounded-xl border p-4 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
+                    className={`absolute inset-0 flex flex-col rounded-xl border p-4 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
                       card.unlocked
                         ? "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]"
                         : "border-white/15 bg-[linear-gradient(165deg,rgba(90,90,90,0.8)_0%,rgba(70,70,70,0.88)_45%,rgba(45,45,45,0.92)_100%)] grayscale"
@@ -170,6 +183,13 @@ export default function CardsPageClient({
                     <h3 className="text-lg font-bold text-[#ffe8b8]">
                       {card.name} History
                     </h3>
+                    <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
+                      Description
+                    </p>
+                    <p className="mt-1 text-sm text-[#efd8b0]">{card.description}</p>
+                    <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
+                      History
+                    </p>
                     <p className="mt-3 text-sm text-[#efd8b0]">
                       {card.history ??
                         "This outlaw's legend spread across saloons and frontier towns, earning a feared reputation that still echoes through the West."}
@@ -189,3 +209,4 @@ export default function CardsPageClient({
     </main>
   );
 }
+
