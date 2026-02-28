@@ -13,6 +13,7 @@ type Card = {
   rarity: string;
   description: string;
   unlocked: boolean;
+  imagePath?: string;
   history?: string;
   abilities: {
     name: string;
@@ -25,12 +26,6 @@ type Card = {
 type CardsPageProps = {
   username: string;
   coins: number;
-};
-
-const CARD_IMAGE_BY_NAME: Record<string, string> = {
-  "billy the kid": "/billie.png",
-  "wyatt earp": "/wynne.png",
-  "butch cassidy": "/sunny.png",
 };
 
 export default function CardsPage({ username, coins }: CardsPageProps) {
@@ -49,8 +44,6 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
     return a.name.localeCompare(b.name);
   });
   const visibleCards = sortedCards.filter((card) => card.unlocked);
-
-  const getCardImageSrc = (name: string) => CARD_IMAGE_BY_NAME[name.toLowerCase()] ?? "/card.png";
 
   return (
     <main className="relative min-h-screen bg-[url('/newcardsbg.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
@@ -121,7 +114,7 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
                     <div className="mt-5 flex flex-1 items-center justify-center">
                       <div className="rounded-lg border-l border-r border-[#f2cd86]/45 px-5">
                         <Image
-                          src={getCardImageSrc(card.name)}
+                          src={card.imagePath ?? "/card.png"}
                           alt={`${card.name} portrait`}
                           width={280}
                           height={280}

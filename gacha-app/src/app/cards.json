@@ -27,7 +27,7 @@
           "description": "When she dies, reduce the HP of the killer by half."
         }
       ],
-      "imagePath": "/assets/images/cards/billy_the_kid.png"
+      "imagePath": "/billie.png"
     },
     {
       "id": "2",
@@ -56,7 +56,7 @@
           "description": "Gains +50% defense when HP drops below 50%."
         }
       ],
-      "imagePath": "/assets/images/cards/wyatt_earp.png"
+      "imagePath": "/wynne.png"
     },
     {
       "id": "3",
@@ -85,7 +85,7 @@
           "description": "Buffs allies."
         }
       ],
-      "imagePath": "/assets/images/cards/butch_cassidy.png"
+      "imagePath": "/butch.png"
     },
     {
       "id": "4",
@@ -114,7 +114,7 @@
           "description": "Gains a damage boost of 20% when paired with Wild Bill."
         }
       ],
-      "imagePath": "/assets/images/cards/calamity_jane.png"
+      "imagePath": "/jane.png"
     },
     {
       "id": "5",
@@ -143,7 +143,7 @@
           "description": "Gains a damage boost of 20% when paired with Calamity Jane."
         }
       ],
-      "imagePath": "/assets/images/cards/wild_bill_hickok.png"
+      "imagePath": "/wildbill.png"
     },
     {
       "id": "6",
@@ -172,7 +172,7 @@
           "description": "Deals a random amount of damage to all enemies and has a 25% chance to stun them for 1 turn."
         }
       ],
-      "imagePath": "/assets/images/cards/doc_holiday.png"
+      "imagePath": "/doc.png"
     },
     {
       "id": "7",
@@ -201,7 +201,7 @@
           "description": "Reduces the attack of all enemies by 20% for 3 turns."
         }
       ],
-      "imagePath": "/assets/images/cards/bass_reaves.png"
+      "imagePath": "/bass.png"
     },
     {
       "id": "8",
@@ -230,7 +230,7 @@
           "description": "Marks an enemy for 3 turns, increasing the damage they take by 20%."
         } 
       ],
-      "imagePath": "/assets/images/cards/belle_starr.png"
+      "imagePath": "/belle.png"
     },
     {
       "id": "9",
@@ -258,7 +258,8 @@
           "cooldown": 5,
           "description": "Deals damage to all enemies based on the number of buffs on allies."
         }
-      ]
+      ],
+      "imagePath": "/beth.png"
     },
     {
       "id": "10",
@@ -286,7 +287,8 @@
           "cooldown": null,
           "description": "Reduces damage taken by 10% for all allies when HP drops below 50%."
         }
-      ]
+      ],
+      "imagePath": "/goodnight.png"
     }
   ]
 }

@@ -25,21 +25,11 @@ type CardDefinition = {
   type: string;
   rarity: string;
   description: string;
+  imagePath?: string;
 };
 
 const tableName = process.env.DYNAMODB_USERS_TABLE;
 const region = process.env.AWS_REGION;
-
-const CARD_IMAGE_BY_NAME: Record<string, string> = {
-  "billy the kid": "/billie.png",
-  "wyatt earp": "/wynne.png",
-  "butch cassidy": "/sunny.png",
-  "calamity jane": "/jane.png",
-  "doc holiday": "/doc.png",
-  "bass reaves": "/bass.png",
-  "belle starr": "/belle.png",
-  "charles goodnight": "/goodnight.png",
-};
 
 const BANNER_POOLS: Record<BannerId, string[]> = {
   "outlaw-legend": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
@@ -84,7 +74,7 @@ function getDocClient() {
 function mapCardForResponse(card: CardDefinition): SummonCard {
   return {
     ...card,
-    imageSrc: CARD_IMAGE_BY_NAME[card.name.toLowerCase()] ?? "/card.png",
+    imageSrc: card.imagePath ?? "/card.png",
   };
 }
 

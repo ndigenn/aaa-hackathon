@@ -10,17 +10,7 @@ type InventoryCard = {
   rarity: string;
   type: string;
   unlocked?: boolean;
-};
-
-const CARD_IMAGE_BY_NAME: Record<string, string> = {
-  "billy the kid": "/billie.png",
-  "wyatt earp": "/wynne.png",
-  "butch cassidy": "/sunny.png",
-  "calamity jane": "/jane.png",
-  "doc holiday": "/doc.png",
-  "bass reaves": "/bass.png",
-  "belle starr": "/belle.png",
-  "charles goodnight": "/goodnight.png",
+  imagePath?: string;
 };
 
 const rarityOrder: Record<string, number> = {
@@ -45,7 +35,7 @@ export default async function HomePage() {
       name: card.name,
       rarity: card.rarity,
       type: card.type,
-      imageSrc: CARD_IMAGE_BY_NAME[card.name.toLowerCase()] ?? "/card.png",
+      imageSrc: card.imagePath ?? "/card.png",
     }));
 
   return (
