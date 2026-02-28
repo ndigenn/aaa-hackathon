@@ -9,6 +9,8 @@ export default function LoginPage() {
   });
 
   const [error, setError] = useState("");
+  const [resetMessage, setResetMessage] = useState("");
+  const [isSendingReset, setIsSendingReset] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -17,6 +19,7 @@ export default function LoginPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setResetMessage("");
     const params = new URLSearchParams({
       returnTo: "/home",
       prompt: "login",
@@ -28,6 +31,43 @@ export default function LoginPage() {
     }
 
     window.location.href = `/auth/login?${params.toString()}`;
+  };
+
+  const handleForgotPassword = async () => {
+    setError("");
+    setResetMessage("");
+
+    const email = form.emailOrUsername.trim();
+    if (!email || !email.includes("@")) {
+      setError("Enter your email above, then click Forgot password.");
+      return;
+    }
+
+    setIsSendingReset(true);
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const payload = (await response.json()) as { error?: string; message?: string };
+      if (!response.ok) {
+        setError(payload.error ?? "Could not start password reset.");
+        return;
+      }
+
+      setResetMessage(
+        payload.message ??
+          "If that email exists, a password reset link has been sent.",
+      );
+    } catch {
+      setError("Network error while starting password reset.");
+    } finally {
+      setIsSendingReset(false);
+    }
   };
 
   return (
@@ -88,6 +128,9 @@ export default function LoginPage() {
               />
 
               {error ? <p className="text-sm text-[#ff8e8e]">{error}</p> : null}
+              {resetMessage ? (
+                <p className="text-sm text-[#9ef0b0]">{resetMessage}</p>
+              ) : null}
 
               <button
                 type="submit"
@@ -98,9 +141,14 @@ export default function LoginPage() {
             </form>
 
             <div className="relative mt-4 flex items-center justify-between text-sm text-[#f1d8ad]">
-              <a href="/auth/login" className="underline decoration-[#d8a768] underline-offset-2">
-                Forgot password?
-              </a>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                disabled={isSendingReset}
+                className="underline decoration-[#d8a768] underline-offset-2 disabled:opacity-60"
+              >
+                {isSendingReset ? "Sending..." : "Forgot password?"}
+              </button>
               <a href="/signup" className="font-semibold underline decoration-[#d8a768] underline-offset-2">
                 Create account
               </a>
