@@ -41,7 +41,7 @@ const ENEMY_TEAM_TEMPLATE: BattleUnit[] = [
     cardId: "enemy-1",
     name: "Bandit Scout",
     type: "DPS",
-    imageSrc: "/card.png",
+    imageSrc: "/scout.png",
     hp: 260,
     maxHp: 260,
     attack: 58,
@@ -55,7 +55,7 @@ const ENEMY_TEAM_TEMPLATE: BattleUnit[] = [
     cardId: "enemy-2",
     name: "Bandit Bruiser",
     type: "Tank",
-    imageSrc: "/card.png",
+    imageSrc: "/bruiser.png",
     hp: 320,
     maxHp: 320,
     attack: 50,
@@ -69,7 +69,7 @@ const ENEMY_TEAM_TEMPLATE: BattleUnit[] = [
     cardId: "enemy-3",
     name: "Bandit Sniper",
     type: "Debuffer",
-    imageSrc: "/card.png",
+    imageSrc: "/sniper.png",
     hp: 240,
     maxHp: 240,
     attack: 62,
@@ -428,7 +428,13 @@ export default function BattlePageClient({ availableCards }: { availableCards: B
         </div>
 
         <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_320px]">
-          <div className="rounded-xl border border-[#f0c67a]/35 bg-[#2a1b12]/55 p-3">
+          <div className="relative overflow-hidden rounded-xl border border-[#f0c67a]/35 p-3">
+            <div
+              className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: "url('/field.png')" }}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(15,10,8,0.52)_0%,rgba(18,12,9,0.6)_46%,rgba(21,14,10,0.76)_100%)]" />
+            <div className="relative">
             <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">Enemy Line</p>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
               {enemyUnits.map((unit) => {
@@ -540,6 +546,7 @@ export default function BattlePageClient({ availableCards }: { availableCards: B
                   </button>
                 );
               })}
+            </div>
             </div>
           </div>
 

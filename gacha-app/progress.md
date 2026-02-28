@@ -91,3 +91,10 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
 - Validation:
   - `npm run lint` passes.
   - Playwright smoke run executed for `/battle`; environment redirects to Auth0 login here, so direct in-battle visual validation was blocked in this environment.
+- Battle art integration:
+  - Enemy units now use custom art assets:
+    - Bandit Scout -> `/scout.png`
+    - Bandit Bruiser -> `/bruiser.png`
+    - Bandit Sniper -> `/sniper.png`
+  - Battlefield combat panel now renders `field.png` as the battle surface background with a readability overlay.
+- Validation: `npm run lint` passes.
