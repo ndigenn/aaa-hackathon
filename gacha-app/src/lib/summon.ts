@@ -138,7 +138,7 @@ async function findUserRecord(client: DynamoDBDocumentClient, userId: string) {
     new ScanCommand({
       TableName: tableName,
       FilterExpression:
-        "(userId = :userId OR #sub = :userId OR id = :userId OR PK = :pk) AND (attribute_not_exists(SK) OR SK = :profileSk OR begins_with(SK, :profilePrefix))",
+        "(userId = :userId OR #sub = :userId OR id = :userId OR PK = :pk) AND (attribute_not_exists(SK) OR SK = :profileSk OR begins_with(SK, :profilePrefix) OR SK = :profileSkLower OR begins_with(SK, :profilePrefixLower))",
       ExpressionAttributeNames: {
         "#sub": "sub",
       },
@@ -147,6 +147,8 @@ async function findUserRecord(client: DynamoDBDocumentClient, userId: string) {
         ":pk": `USER#${userId}`,
         ":profileSk": "PROFILE",
         ":profilePrefix": "PROFILE",
+        ":profileSkLower": "profile",
+        ":profilePrefixLower": "profile",
       },
       Limit: 25,
     }),
@@ -240,13 +242,12 @@ async function runSetSummonUpdate(
       Key: key,
       UpdateExpression:
         "SET coins = coins - :cost, updatedAt = :updatedAt ADD ownedCardIds :ownedCardIds",
-      ConditionExpression: `${conditionExpression} AND coins >= :cost AND (attribute_not_exists(ownedCardIds) OR NOT contains(ownedCardIds, :drawnCardId))`,
+      ConditionExpression: `${conditionExpression} AND coins >= :cost`,
       ExpressionAttributeNames: expressionAttributeNames,
       ExpressionAttributeValues: {
         ":cost": summonCost,
         ":updatedAt": nowIso,
         ":ownedCardIds": new Set([drawnCardId]),
-        ":drawnCardId": drawnCardId,
       },
       ReturnValues: "ALL_NEW",
     }),
@@ -278,7 +279,7 @@ async function runListSummonUpdate(
       Key: key,
       UpdateExpression:
         "SET coins = if_not_exists(coins, :zero) - :cost, updatedAt = :updatedAt, ownedCardIds = list_append(if_not_exists(ownedCardIds, :emptyList), :newOwnedCardIds)",
-      ConditionExpression: `${conditionExpression} AND if_not_exists(coins, :zero) >= :cost AND (attribute_not_exists(ownedCardIds) OR NOT contains(ownedCardIds, :drawnCardId))`,
+      ConditionExpression: `${conditionExpression} AND if_not_exists(coins, :zero) >= :cost`,
       ExpressionAttributeNames: expressionAttributeNames,
       ExpressionAttributeValues: {
         ":zero": 0,
@@ -286,7 +287,6 @@ async function runListSummonUpdate(
         ":updatedAt": nowIso,
         ":emptyList": [],
         ":newOwnedCardIds": [drawnCardId],
-        ":drawnCardId": drawnCardId,
       },
       ReturnValues: "ALL_NEW",
     }),
@@ -298,7 +298,6 @@ async function runListSummonUpdate(
 async function runDuplicateSummonUpdate(
   client: DynamoDBDocumentClient,
   key: Record<string, string>,
-  drawnCardId: string,
   nowIso: string,
 ) {
   if (!tableName) {
@@ -317,13 +316,12 @@ async function runDuplicateSummonUpdate(
       Key: key,
       UpdateExpression:
         "SET coins = if_not_exists(coins, :zero) - :cost, updatedAt = :updatedAt",
-      ConditionExpression: `${conditionExpression} AND if_not_exists(coins, :zero) >= :cost AND contains(ownedCardIds, :drawnCardId)`,
+      ConditionExpression: `${conditionExpression} AND if_not_exists(coins, :zero) >= :cost`,
       ExpressionAttributeNames: expressionAttributeNames,
       ExpressionAttributeValues: {
         ":zero": 0,
         ":cost": DUPLICATE_SUMMON_COST,
         ":updatedAt": nowIso,
-        ":drawnCardId": drawnCardId,
       },
       ReturnValues: "ALL_NEW",
     }),
@@ -392,7 +390,6 @@ export async function runSingleSummonForUser(
         const remainingCoins = await runDuplicateSummonUpdate(
           client,
           keyCandidate,
-          drawnCard.id,
           nowIso,
         );
         return {
@@ -431,34 +428,6 @@ export async function runSingleSummonForUser(
       };
     } catch (setError) {
       if (isConditionalCheckFailed(setError)) {
-        if (!isDuplicatePull) {
-          try {
-            const remainingCoins = await runDuplicateSummonUpdate(
-              client,
-              keyCandidate,
-              drawnCard.id,
-              nowIso,
-            );
-            return {
-              card: drawnCard,
-              remainingCoins: Number.isFinite(remainingCoins) ? remainingCoins : 0,
-              cost: DUPLICATE_SUMMON_COST,
-              refundedCoins: DUPLICATE_SUMMON_REFUND,
-              isDuplicate: true,
-            };
-          } catch (duplicateError) {
-            if (isConditionalCheckFailed(duplicateError)) {
-              sawConditionalFailure = true;
-              continue;
-            }
-            if (isValidationException(duplicateError)) {
-              lastValidationError = duplicateError;
-              continue;
-            }
-            throw duplicateError;
-          }
-        }
-
         sawConditionalFailure = true;
         continue;
       }

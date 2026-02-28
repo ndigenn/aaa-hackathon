@@ -60,3 +60,9 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Response now includes `refundedCoins` and `isDuplicate` for duplicate pulls.
 - Summon reveal UI now displays duplicate refund text when applicable.
 - Validation: `npm run lint` passes.
+- Duplicate refund bugfix:
+  - Removed strict `contains(ownedCardIds, :drawnCardId)` conditions from summon update queries, which could fail on mixed legacy `ownedCardIds` shapes/types and cause duplicate summons to error.
+  - Duplicate path now uses pre-read ownership detection and applies net duplicate cost (500) via coin-only update.
+  - Non-duplicate path continues to charge full cost and add card ownership.
+  - Expanded profile scan fallback to also accept lowercase `profile` SK variants.
+- Validation: `npm run lint` passes.
