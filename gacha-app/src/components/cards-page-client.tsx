@@ -27,12 +27,14 @@ type Card = {
 type CardsPageProps = {
   username: string;
   coins: number;
+  ownedCardIds: string[];
 };
 
-export default function CardsPage({ username, coins }: CardsPageProps) {
+export default function CardsPage({ username, coins, ownedCardIds }: CardsPageProps) {
   const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const cards = cardsData.cards as Card[];
+  const ownedCardIdSet = new Set(ownedCardIds);
 
   const rarityOrder: Record<string, number> = {
     "Ultra Rare": 0,
@@ -45,7 +47,9 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
     if (rarityDiff !== 0) return rarityDiff;
     return a.name.localeCompare(b.name);
   });
-  const visibleCards = sortedCards.filter((card) => card.unlocked);
+  const visibleCards = sortedCards.filter(
+    (card) => card.unlocked || ownedCardIdSet.has(card.id),
+  );
 
   function playVoiceLine(voiceLinePath?: string) {
     if (!voiceLinePath) return;
@@ -98,7 +102,9 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
           </p>
         ) : (
           <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            {visibleCards.map((card) => (
+            {visibleCards.map((card) => {
+              const isCardUnlocked = card.unlocked || ownedCardIdSet.has(card.id);
+              return (
               <div
                 key={card.id}
                 role="button"
@@ -123,7 +129,7 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
                 >
                   <article
                     className={`absolute inset-0 flex flex-col rounded-xl border p-4 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
-                      card.unlocked
+                      isCardUnlocked
                         ? "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]"
                         : "border-white/15 bg-[linear-gradient(165deg,rgba(90,90,90,0.8)_0%,rgba(70,70,70,0.88)_45%,rgba(45,45,45,0.92)_100%)] grayscale"
                     }`}
@@ -132,7 +138,7 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
                     <div className="flex items-start justify-between gap-3">
                       <h2 className="text-lg font-bold">{card.name}</h2>
                       <span className="rounded-full border border-white/20 px-2 py-0.5 text-xs font-semibold">
-                        {card.unlocked ? "Unlocked" : "Locked"}
+                        {isCardUnlocked ? "Unlocked" : "Locked"}
                       </span>
                     </div>
                     <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#f4cd84]">
@@ -201,7 +207,7 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
 
                   <article
                     className={`absolute inset-0 flex flex-col rounded-xl border p-4 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
-                      card.unlocked
+                      isCardUnlocked
                         ? "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]"
                         : "border-white/15 bg-[linear-gradient(165deg,rgba(90,90,90,0.8)_0%,rgba(70,70,70,0.88)_45%,rgba(45,45,45,0.92)_100%)] grayscale"
                     }`}
@@ -230,7 +236,8 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
                   </article>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </section>
