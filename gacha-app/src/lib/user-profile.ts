@@ -10,6 +10,7 @@ type UserProfileRecord = {
   username?: string;
   displayName?: string;
   coins?: number;
+  ownedCardIds?: string[] | Set<string>;
 };
 
 const tableName = process.env.DYNAMODB_USERS_TABLE;
@@ -105,9 +106,17 @@ export async function getTopNavProfile(returnToPath: string) {
     : rawUsername;
 
   const coins = Number(profile?.coins ?? 0);
+  const ownedCardIdsRaw = profile?.ownedCardIds;
+  const ownedCardIds =
+    ownedCardIdsRaw instanceof Set
+      ? [...ownedCardIdsRaw].map(String)
+      : Array.isArray(ownedCardIdsRaw)
+        ? ownedCardIdsRaw.map(String)
+        : [];
 
   return {
     username,
     coins: Number.isFinite(coins) ? coins : 0,
+    ownedCardIds,
   };
 }
