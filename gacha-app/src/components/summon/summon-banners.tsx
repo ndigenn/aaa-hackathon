@@ -48,6 +48,14 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function setSummonMusicDucked(ducked: boolean) {
+  window.dispatchEvent(
+    new CustomEvent("summon:music-duck", {
+      detail: { ducked },
+    }),
+  );
+}
+
 export default function SummonBanners({ initialCoins }: { initialCoins: number }) {
   const router = useRouter();
   const activeAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -65,7 +73,10 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
   );
 
   function playVoiceLine(voiceLinePath?: string) {
-    if (!voiceLinePath) return;
+    if (!voiceLinePath) {
+      setSummonMusicDucked(false);
+      return;
+    }
 
     if (activeAudioRef.current) {
       activeAudioRef.current.pause();
@@ -74,8 +85,12 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
 
     const audio = new Audio(voiceLinePath);
     audio.volume = 1;
+    audio.addEventListener("ended", () => setSummonMusicDucked(false), { once: true });
+    audio.addEventListener("error", () => setSummonMusicDucked(false), { once: true });
     activeAudioRef.current = audio;
-    void audio.play().catch(() => {});
+    void audio.play().catch(() => {
+      setSummonMusicDucked(false);
+    });
   }
 
   async function handleSingleSummon(bannerId: string) {
@@ -91,6 +106,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
     setIsSummoning(true);
     setShowReveal(true);
     setIsDrawing(true);
+    setSummonMusicDucked(true);
 
     try {
       const [response] = await Promise.all([
@@ -112,6 +128,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
             : "Summon failed. Please try again.";
         setErrorText(errorMessage);
         setShowReveal(false);
+        setSummonMusicDucked(false);
         return;
       }
 
@@ -124,6 +141,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
     } catch {
       setErrorText("Network error while summoning. Please try again.");
       setShowReveal(false);
+      setSummonMusicDucked(false);
     } finally {
       setIsSummoning(false);
     }
@@ -132,6 +150,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
   function closeReveal() {
     setShowReveal(false);
     setIsDrawing(false);
+    setSummonMusicDucked(false);
   }
 
   useEffect(() => {
@@ -140,6 +159,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
       activeAudioRef.current.pause();
       activeAudioRef.current.currentTime = 0;
       activeAudioRef.current = null;
+      setSummonMusicDucked(false);
     };
   }, []);
 

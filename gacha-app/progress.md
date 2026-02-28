@@ -47,3 +47,8 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Added `src/components/summon/summon-audio.tsx` and mounted it on summon page so `/pianoSaloon.mp3` loops while on summon page at volume `0.22`.
   - Summon background music retries once on first pointer/key interaction if autoplay is blocked.
 - Validation: `npm run lint` passes.
+- Summon audio balancing update:
+  - Added summon music ducking event flow.
+  - `src/components/summon/summon-banners.tsx` now dispatches `summon:music-duck` with `{ ducked: true }` when summon starts, and restores with `{ ducked: false }` on summon failure, reveal close, voice-line end/error, and unmount cleanup.
+  - `src/components/summon/summon-audio.tsx` listens for `summon:music-duck` and adjusts BGM volume from `0.22` (normal) to `0.10` (ducked).
+- Validation: `npm run lint` passes.
