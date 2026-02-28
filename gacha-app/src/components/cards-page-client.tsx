@@ -53,7 +53,7 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
   const getCardImageSrc = (name: string) => CARD_IMAGE_BY_NAME[name.toLowerCase()] ?? "/card.png";
 
   return (
-    <main className="relative min-h-screen bg-[url('/cardsbackground.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
+    <main className="relative min-h-screen bg-[url('/newcardsbg.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
       <AppTopNav username={username} coins={coins} />
 
       <section className="relative mx-auto w-full max-w-xl pt-32">
