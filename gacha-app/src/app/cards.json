@@ -1,0 +1,292 @@
+{
+  "cards": [
+    {
+      "id": "card_001",
+      "name": "Billy the Kid",
+      "type": "DPS",
+      "rarity": "Ultra Rare",
+      "description": "A runaway teenager turned infamous gunman outlaw involved in the Lincoln Country War, a violent feud between mercantile factions in New Mexico.",
+      "unlocked": true,
+      "stats": {
+        "attack": 72,
+        "defense": 45,
+        "speed": 88,
+        "hp": 300
+      },
+      "abilities": [
+        {
+          "name": "Kid Tactics",
+          "type": "Active",
+          "cooldown": 3,
+          "description": "Shoots an extremely powerful attack at all enemies."
+        },
+        {
+          "name": "Out With a Bang",
+          "type": "Passive",
+          "cooldown": null,
+          "description": "When she dies, reduce the HP of the killer by half."
+        }
+      ],
+      "imagePath": "/assets/images/cards/billy_the_kid.png"
+    },
+    {
+      "id": "card_002",
+      "name": "Wyatt Earp",
+      "type": "Tank",
+      "rarity": "Common",
+      "description": "A former pimp, thief, con artist, and gambler who ended up as a law enforcement officer renowned for winning a gunfight in the Oklahoma Corral.",
+      "unlocked": true,
+      "stats": {
+        "attack": 50,
+        "defense": 95,
+        "speed": 40,
+        "hp": 520
+      },
+      "abilities": [
+        {
+          "name": "Redemption",
+          "type": "Active",
+          "cooldown": 4,
+          "description": "Buffs allies."
+        },
+        {
+          "name": "Lawman's Resolve",
+          "type": "Passive",
+          "cooldown": null,
+          "description": "Gains +50% defense when HP drops below 50%."
+        }
+      ],
+      "imagePath": "/assets/images/cards/wyatt_earp.png"
+    },
+    {
+      "id": "card_003",
+      "name": "Butch Cassidy",
+      "type": "Sub DPS",
+      "rarity": "Rare",
+      "description": "A nonviolent outlaw duo known for robbing trains, daring escapes, and strategic planning.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "A Double Life",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Has two lives. When Sundance dies, Butch revives with 50% HP once per battle."
+        },
+        {
+          "name": "Sundance",
+          "type": "Passive",
+          "cooldown": 5,
+          "description": "Buffs allies."
+        }
+      ],
+      "imagePath": "/assets/images/cards/butch_cassidy.png"
+    },
+    {
+      "id": "card_004",
+      "name": "Calamity Jane",
+      "type": "Sub DPS",
+      "rarity": "Ultra Rare",
+      "description": "A orphan who became a skilled shooter, rider, performer, and partner to Wild Bill while taking care of her five younger siblings.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Older Sister",
+          "type": "Passive",
+          "cooldown": 2,
+          "description": "Passively heals allies for 20% of their max HP at the start of each turn."
+        },
+        {
+          "name": "Dual Calamity",
+          "type": "Passive",
+          "cooldown": 5,
+          "description": "Gains a damage boost of 20% when paired with Wild Bill."
+        }
+      ],
+      "imagePath": "/assets/images/cards/calamity_jane.png"
+    },
+    {
+      "id": "card_005",
+      "name": "Wild Bill Hickok",
+      "type": "DPS",
+      "rarity": "Rare",
+      "description": "Renowned for his sharpshooting and bravery, where his exploits as a lawman and gambler in Kansas and Nebraska towns cemented his legendary status.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Sharpshooter",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Deals a huge amount of damage to a single target."
+        },
+        {
+          "name": "Dual Calamity",
+          "type": "Passive",
+          "cooldown": 5,
+          "description": "Gains a damage boost of 20% when paired with Calamity Jane."
+        }
+      ],
+      "imagePath": "/assets/images/cards/wild_bill_hickok.png"
+    },
+    {
+      "id": "card_006",
+      "name": "Doc Holiday",
+      "type": "Healer",
+      "rarity": "Common",
+      "description": "A dentist, gambler, and gunfighter, not scared to start and end a fight. ",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Party Heal",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Heals all allies for 30% of their max HP."
+        },
+        {
+          "name": "Gambler's Punch",
+          "type": "Active",
+          "cooldown": 5,
+          "description": "Deals a random amount of damage to all enemies and has a 25% chance to stun them for 1 turn."
+        }
+      ],
+      "imagePath": "/assets/images/cards/doc_holiday.png"
+    },
+    {
+      "id": "card_007",
+      "name": "Bass Reaves",
+      "type": "Debuffer",
+      "rarity": "Ultra Rare",
+      "description": "An impressive marshal who made up to 3,000 arrests on the most notorious of criminal, a force to not be reckoned with.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Winchester's Snipe",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Uses stealth learned from Cherokee tribe to snipe a single target, dealing a huge amount of damage and has a 25% chance to reduce their attack by 50% for 2 turns."
+        },
+        {
+          "name": "Hand Behind Your Back",
+          "type": "Active",
+          "cooldown": 5,
+          "description": "Reduces the attack of all enemies by 20% for 3 turns."
+        }
+      ],
+      "imagePath": "/assets/images/cards/bass_reaves.png"
+    },
+    {
+      "id": "card_008",
+      "name": "Belle Starr",
+      "type": "DPS",
+      "rarity": "Rare",
+      "description": "An American outlaw and a skilled shooter, she's a reaper dressed in black ready to strike.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Double Barrel Shot",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Shoots two powerful attacks at random enemies."
+        },
+        {
+          "name": "Reaper's Mark",
+          "type": "Passive",
+          "cooldown": null,
+          "description": "Marks an enemy for 3 turns, increasing the damage they take by 20%."
+        } 
+      ],
+      "imagePath": "/assets/images/cards/belle_starr.png"
+    },
+    {
+      "id": "card_009",
+      "name": "Black Bart",
+      "type": "Support",
+      "rarity": "Rare",
+      "description": "A gentleman bandit known for his poetic verses left at the scenes of his crimes, a charismatic figure in the Old West.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Words of the Wise",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Buffs allies' attack and defense by 20% for 3 turns."
+        },
+        {
+          "name": "Poetic Justice",
+          "type": "Active",
+          "cooldown": 5,
+          "description": "Deals damage to all enemies based on the number of buffs on allies."
+        }
+      ]
+    },
+    {
+      "id": "card_010",
+      "name": "Charles Goodnight",
+      "type": "Support",
+      "rarity": "Common",
+      "description": "A legendary cattle rancher and trailblazer, known for his pioneering spirit and contributions to the development of the American West.",
+      "unlocked": false,
+      "stats": {
+        "attack": 110,
+        "defense": 60,
+        "speed": 95,
+        "hp": 420
+      },
+      "abilities": [
+        {
+          "name": "Cattle Drive",
+          "type": "Active",
+          "cooldown": 2,
+          "description": "Increases the attack of all allies by 15% for 3 turns."
+        },
+        {
+          "name": "Trailblazer's Resilience",
+          "type": "Passive",
+          "cooldown": null,
+          "description": "Reduces damage taken by 10% for all allies when HP drops below 50%."
+        }
+      ]
+    }
+  ]
+}
