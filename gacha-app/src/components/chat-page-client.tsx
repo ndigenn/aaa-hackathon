@@ -19,9 +19,9 @@ type ChatPageClientProps = {
 };
 
 export default function ChatPageClient({ username, coins }: ChatPageClientProps) {
-
   const [channel, setChannel] = useState(CHANNELS[0]);
   const [input, setInput] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
     { id: "1", author: "other", text: "Howdy, partner" },
     { id: "2", author: "me", text: "Yo! Anyone pulling on the new banner?" },
@@ -37,15 +37,67 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
 
   const canSend = useMemo(() => input.trim().length > 0, [input]);
 
-  function sendMessage() {
-    if (!canSend) return;
+  async function sendMessage() {
+    if (!canSend || isSending) return;
+    const messageText = input.trim();
     const newMsg: ChatMessage = {
       id: crypto.randomUUID(),
       author: "me",
-      text: input.trim(),
+      text: messageText,
     };
     setMessages((prev) => [...prev, newMsg]);
     setInput("");
+
+    setIsSending(true);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          channel,
+          message: messageText,
+        }),
+      });
+
+      const payload = (await response.json()) as {
+        reply?: string;
+        error?: string;
+      };
+
+      if (!response.ok || !payload.reply) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            author: "other",
+            text: payload.error ?? "Could not get a response right now.",
+          },
+        ]);
+        return;
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          author: "other",
+          text: payload.reply,
+        },
+      ]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          author: "other",
+          text: "Network issue. Please try again.",
+        },
+      ]);
+    } finally {
+      setIsSending(false);
+    }
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -104,10 +156,10 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
                 />
                 <button
                   onClick={sendMessage}
-                  disabled={!canSend}
+                  disabled={!canSend || isSending}
                   className="rounded-lg border border-[#ffe2a0]/80 bg-[linear-gradient(180deg,#ffdc8f_0%,#d7a744_100%)] px-4 py-3 font-extrabold uppercase tracking-[0.05em] text-[#4a2a16] shadow-md transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Send
+                  {isSending ? "Sending..." : "Send"}
                 </button>
               </div>
             </div>
