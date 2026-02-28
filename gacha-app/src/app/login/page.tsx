@@ -60,7 +60,7 @@ export default function LoginPage() {
                         name="emailOrUsername"
                         placeholder="Email or Username"
                         onChange={handleChange}
-                        className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
+                        className="w-full rounded-lg border border-amber-500 bg-[#fff8e8] p-3 text-[#6b3f1f] placeholder:text-[#a6733a] focus:ring-2 focus:ring-amber-600 outline-none"
                     />
 
                     {error && <p className="text-red-600 text-sm">{error}</p>}

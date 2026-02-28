@@ -32,25 +32,14 @@ type SummonResult = {
 const SUMMON_BANNERS: SummonBanner[] = [
   {
     id: "outlaw-legend",
-    title: "Outlaw Legend",
-    subtitle: "Frontier Banner",
-    description: "Ride for rare sheriffs, bounty hunters, and mythic gunslingers.",
-    legendaryRate: "3.0%",
+    title: "Frontier Legends",
+    subtitle: "Featured Banner",
+    description: "One banner with every current card in the summon pool.",
+    legendaryRate: "Mixed",
     freePullTimer: "02:14:09",
     ctaLabel: "Single Draw (1,000)",
     accentClass:
       "bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]",
-  },
-  {
-    id: "cowgirl-hero",
-    title: "Cowgirl Hero",
-    subtitle: "Heroic Spotlight",
-    description: "Call in fearless cowgirls with boosted drops and bonus shards.",
-    legendaryRate: "5.0%",
-    freePullTimer: "00:47:31",
-    ctaLabel: "Single Draw (1,000)",
-    accentClass:
-      "bg-[linear-gradient(165deg,rgba(170,86,24,0.9)_0%,rgba(130,58,24,0.95)_50%,rgba(81,36,22,0.95)_100%)]",
   },
 ];
 

@@ -13,3 +13,29 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Both captures redirect to Auth0 login in this environment, so direct visual verification of in-app background pages was blocked by authentication.
 - Note: `package.json` and `package-lock.json` include Playwright dependency updates from setup.
 - Cleaned temporary local validation artifacts (`output/`, `web_game_playwright_client.local.js`) after verification run.
+
+- New request handled: fix summon failure (500: "Summon failed. Please try again.") and reduce summon to one banner.
+- Root cause identified in `src/lib/summon.ts`: update uses `ADD ownedCardIds :set` (String Set). Existing user records can have `ownedCardIds` stored as a List from prior writes, which causes DynamoDB `ValidationException` and falls into the generic 500 handler.
+- Fix implemented:
+  - Keep set-based update path as primary.
+  - On `ValidationException`, retry with list-based update using `list_append(if_not_exists(ownedCardIds, :emptyList), :newOwnedCardIds)` and same coin deduction condition.
+  - Preserve insufficient coin behavior in fallback by mapping `ConditionalCheckFailedException` to `SummonError(INSUFFICIENT_COINS)`.
+- Banner simplification to single banner:
+  - `src/lib/summon.ts`: `BannerId` narrowed to only `"outlaw-legend"`; pool now includes all card IDs 1-10.
+  - `src/components/summon/summon-banners.tsx`: removed second banner card; updated copy to single featured banner.
+  - `src/app/summon/page.tsx`: heading/subtitle updated to singular banner copy.
+- Validation:
+  - `npm run lint` passes.
+  - Ran Playwright client loop via local copy of skill script against `/summon`; screenshots generated, but route redirects to Auth0 login in this environment so in-app summon interaction could not be exercised here.
+- Cleanup: removed temporary local Playwright helper/action files and temporary screenshot output after verification.
+- Follow-up request handled: fix shop purchase failing with DynamoDB ValidationException (key does not match schema).
+- Root cause: `src/lib/shop.ts` used fixed key `{ PK, SK }`, but active `Users` table profile rows may be keyed differently (`id`, `userId`, or `sub`).
+- Shop fix (`src/lib/shop.ts`):
+  - Added key-schema-tolerant fallback flow.
+  - On `ValidationException` from PK/SK update, scan by auth user id (`userId` OR `sub` OR `id`) to locate record.
+  - Build key candidates from located record (`PK/SK`, `id`, `userId`, `sub`) and retry update until one matches table schema.
+  - Preserve error mapping: missing profile -> `ShopError(USER_NOT_FOUND)`.
+- Additional hardening (`src/lib/summon.ts`):
+  - Applied the same key-schema-tolerant key resolution path for summon updates.
+  - Existing list-vs-set `ownedCardIds` fallback remains; now works across non-PK/SK schemas too.
+- Validation: `npm run lint` passes after changes.

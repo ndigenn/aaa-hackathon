@@ -75,7 +75,7 @@ export default function SignUpPage() {
                         value={form.username}
                         onChange={handleChange}
                         required
-                        className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
+                        className="w-full rounded-lg border border-amber-500 bg-[#fff8e8] p-3 text-[#6b3f1f] placeholder:text-[#a6733a] focus:ring-2 focus:ring-amber-600 outline-none"
                     />
 
                     <input
@@ -85,7 +85,7 @@ export default function SignUpPage() {
                         value={form.email}
                         onChange={handleChange}
                         required
-                        className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
+                        className="w-full rounded-lg border border-amber-500 bg-[#fff8e8] p-3 text-[#6b3f1f] placeholder:text-[#a6733a] focus:ring-2 focus:ring-amber-600 outline-none"
                     />
 
                     {error && (
