@@ -62,7 +62,10 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
   }
 
   function handleCardFlip(card: Card) {
-    playVoiceLine(card.voiceLinePath);
+    const isFlippingToHistory = flippedCardId !== card.id;
+    if (isFlippingToHistory) {
+      playVoiceLine(card.voiceLinePath);
+    }
     setFlippedCardId((current) => (current === card.id ? null : card.id));
   }
 
