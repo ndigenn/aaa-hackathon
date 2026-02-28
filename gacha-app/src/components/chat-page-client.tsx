@@ -53,23 +53,28 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-300 via-amber-400 to-yellow-600">
-      <div className="absolute inset-0 bg-[url('/western-bg.jpg')] bg-cover bg-center opacity-15 pointer-events-none" />
+    <div className="relative min-h-screen overflow-hidden">
+      <div
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/1on1.png')" }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(12,8,6,0.38)_0%,rgba(20,10,8,0.5)_45%,rgba(25,14,9,0.72)_100%)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-[linear-gradient(180deg,rgba(14,8,6,0.6)_0%,rgba(14,8,6,0)_100%)]" />
 
       <div className="relative flex min-h-screen flex-col">
-        <AppTopNav username={username} coins={coins} />
+        <AppTopNav username={username} coins={coins} className="pt-2" />
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-28">
-          <section className="mx-auto max-w-3xl rounded-2xl border-4 border-amber-700 bg-white/90 shadow-2xl backdrop-blur-sm">
-            <div className="flex items-center justify-between border-b border-amber-700/30 px-4 py-3">
-              <div className="font-semibold text-amber-900">Chat</div>
+          <section className="mx-auto max-w-3xl rounded-[26px] border-2 border-[#f0c67a]/60 bg-[linear-gradient(165deg,rgba(52,29,18,0.86)_0%,rgba(42,24,15,0.9)_50%,rgba(33,20,12,0.94)_100%)] shadow-[0_22px_55px_rgba(18,8,5,0.6)] backdrop-blur-[2px]">
+            <div className="flex items-center justify-between border-b border-[#f0c67a]/35 px-4 py-3">
+              <div className="font-extrabold uppercase tracking-[0.12em] text-[#f9dfa8]">Saloon Chat</div>
 
-              <label className="flex items-center gap-2 text-sm text-amber-900">
-                <span className="opacity-80">Channel</span>
+              <label className="flex items-center gap-2 text-sm text-[#f4d4a0]">
+                <span className="opacity-90">Channel</span>
                 <select
                   value={channel}
                   onChange={(e) => setChannel(e.target.value)}
-                  className="rounded-lg border border-amber-500 bg-white px-3 py-2 text-amber-900 outline-none focus:ring-2 focus:ring-amber-600"
+                  className="rounded-lg border border-[#f0c67a]/65 bg-[#2f1a11]/90 px-3 py-2 text-[#ffe7b9] outline-none focus:ring-2 focus:ring-[#d7a744]"
                 >
                   {CHANNELS.map((c) => (
                     <option key={c} value={c}>
@@ -80,7 +85,7 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
               </label>
             </div>
 
-            <div ref={listRef} className="h-[420px] overflow-y-auto px-4 py-4">
+            <div ref={listRef} className="h-[420px] overflow-y-auto bg-[linear-gradient(180deg,rgba(25,14,9,0.38)_0%,rgba(25,14,9,0.2)_100%)] px-4 py-4">
               <div className="flex flex-col gap-3">
                 {messages.map((m) => (
                   <MessageRow key={m.id} msg={m} />
@@ -88,19 +93,19 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
               </div>
             </div>
 
-            <div className="border-t border-amber-700/30 px-4 py-3">
+            <div className="border-t border-[#f0c67a]/35 px-4 py-3">
               <div className="flex gap-2">
                 <input
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onKeyDown}
                   placeholder={`Message ${channel}...`}
-                  className="w-full rounded-lg border border-amber-500 bg-white px-3 py-3 outline-none focus:ring-2 focus:ring-amber-600"
+                  className="w-full rounded-lg border border-[#f0c67a]/60 bg-[#2f1a11]/90 px-3 py-3 text-[#f8e9c6] placeholder:text-[#d5b98a] outline-none focus:ring-2 focus:ring-[#d7a744]"
                 />
                 <button
                   onClick={sendMessage}
                   disabled={!canSend}
-                  className="rounded-lg bg-amber-700 px-4 py-3 font-bold text-white shadow-md transition hover:bg-amber-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-lg border border-[#ffe2a0]/80 bg-[linear-gradient(180deg,#ffdc8f_0%,#d7a744_100%)] px-4 py-3 font-extrabold uppercase tracking-[0.05em] text-[#4a2a16] shadow-md transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Send
                 </button>
@@ -120,22 +125,20 @@ function MessageRow({ msg }: { msg: ChatMessage }) {
 
   return (
     <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
-      {!isMe && (
-        <div className="h-8 w-8 shrink-0 rounded-full bg-amber-300 border border-amber-600" />
-      )}
+      {!isMe && <div className="h-8 w-8 shrink-0 rounded-full border border-[#f0c67a]/70 bg-[#a66b2e]" />}
 
       <div
         className={[
           "max-w-[75%] rounded-2xl px-4 py-3 shadow-sm border",
-          isMe ? "bg-amber-700 text-white border-amber-800" : "bg-white text-amber-950 border-amber-300",
+          isMe
+            ? "border-[#d7a744] bg-[linear-gradient(180deg,#6a3f20_0%,#512d17_100%)] text-[#ffeac2]"
+            : "border-[#f0c67a]/60 bg-[linear-gradient(180deg,#f3d197_0%,#e6bb73_100%)] text-[#3d210f]",
         ].join(" ")}
       >
         <p className="whitespace-pre-wrap break-words">{msg.text}</p>
       </div>
 
-      {isMe && (
-        <div className="h-8 w-8 shrink-0 rounded-full bg-amber-900 border border-amber-950" />
-      )}
+      {isMe && <div className="h-8 w-8 shrink-0 rounded-full border border-[#d7a744] bg-[#4a2a16]" />}
     </div>
   );
 }
