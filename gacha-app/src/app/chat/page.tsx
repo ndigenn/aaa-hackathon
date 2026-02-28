@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import BottomNav from "@/components/bottom-nav";
 
 type ChatMessage = {
@@ -58,20 +59,24 @@ export default function ChatPage() {
             <div className="relative flex min-h-screen flex-col">
                 {/* TOP BAR */}
                 <header className="w-full border-b border-amber-900/30 bg-white/70 backdrop-blur-sm">
-                    <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-                        <div className="font-semibold text-amber-900">{username}</div>
+                    <div className="mx-auto max-w-[90rem] px-2 py-3 sm:px-3 md:px-4">
+                        <div className="relative flex items-center justify-center">
+                            <div className="absolute -left-4 font-semibold text-amber-900 sm:-left-32">
+                                {username}
+                            </div>
 
-                        <div className="flex items-center gap-2">
-                            {/* swap to your logo if you want */}
-                            <img
-                                src="/araara-logo.png"
+                            <Image
+                                src="/transparent_logo.png"
                                 alt="AraAra Alliance"
-                                className="h-10 w-auto"
+                                width={140}
+                                height={140}
+                                className="h-15 w-auto"
+                                priority
                             />
-                        </div>
 
-                        <div className="font-semibold text-amber-900">
-                            Gold: <span className="tabular-nums">{gold.toLocaleString()}</span>
+                            <div className="absolute -right-4 font-semibold text-amber-900 sm:-right-32">
+                                Gold: <span className="tabular-nums">{gold.toLocaleString()}</span>
+                            </div>
                         </div>
                     </div>
                 </header>
