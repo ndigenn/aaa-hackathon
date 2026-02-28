@@ -135,7 +135,7 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                           handleCardFlip(card);
                         }
                       }}
-                      className="w-full cursor-pointer text-left"
+                      className="relative w-full cursor-pointer text-left hover:z-40 focus-within:z-40"
                       style={{ perspective: "1200px" }}
                     >
                       <div
@@ -246,17 +246,14 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                             <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
                               Click to flip back
                             </span>
-                            <div
-                              className="group relative"
-                              onClick={(event) => event.stopPropagation()}
-                            >
+                            <div className="group static" onClick={(event) => event.stopPropagation()}>
                               <button
                                 type="button"
                                 className="rounded-md border border-[#f2cd86]/50 bg-[#3a2348]/80 px-2.5 py-1 text-xs font-bold uppercase tracking-[0.08em] text-[#ffe8b8] hover:bg-[#4a2b5f]"
                               >
                                 History
                               </button>
-                              <div className="pointer-events-none invisible absolute bottom-full right-0 z-50 mb-2 w-80 max-h-56 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition group-hover:visible group-hover:opacity-100">
+                              <div className="pointer-events-none invisible absolute bottom-12 left-3 right-3 z-[9999] max-h-64 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_12px_30px_rgba(0,0,0,0.55)] transition group-hover:visible group-hover:opacity-100">
                                 <p className="mb-2 text-xs font-bold uppercase tracking-[0.08em] text-[#f4cd84]">
                                   History Details
                                 </p>
