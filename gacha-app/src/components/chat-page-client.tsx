@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import AppTopNav from "@/components/app-top-nav";
 import BottomNav from "@/components/bottom-nav";
 
@@ -14,12 +15,26 @@ type ChatMessage = {
 type OwnedCardOption = {
   id: string;
   name: string;
+  imageSrc: string;
 };
 
 type ChatPageClientProps = {
   username: string;
   coins: number;
   ownedCards: OwnedCardOption[];
+};
+
+const AVATAR_POSITION_BY_NAME: Record<string, string> = {
+  "billy the kid": "center 24%",
+  "wyatt earp": "center 22%",
+  "butch cassidy": "center 26%",
+  "calamity jane": "center 20%",
+  "wild bill hickok": "center 22%",
+  "doc holiday": "center 24%",
+  "bass reaves": "center 20%",
+  "belle starr": "center 22%",
+  "black bart": "center 22%",
+  "charles goodnight": "center 24%",
 };
 
 function createStarterMessages(cardName: string): ChatMessage[] {
@@ -176,7 +191,7 @@ export default function ChatPageClient({ username, coins, ownedCards }: ChatPage
             <div ref={listRef} className="h-[340px] overflow-y-auto bg-[linear-gradient(180deg,rgba(25,14,9,0.38)_0%,rgba(25,14,9,0.2)_100%)] px-4 py-4">
               <div className="flex flex-col gap-3">
                 {messages.map((m) => (
-                  <MessageRow key={m.id} msg={m} />
+                  <MessageRow key={m.id} msg={m} avatarSrc={selectedCard?.imageSrc} avatarAlt={selectedCard?.name} />
                 ))}
               </div>
             </div>
@@ -209,12 +224,38 @@ export default function ChatPageClient({ username, coins, ownedCards }: ChatPage
   );
 }
 
-function MessageRow({ msg }: { msg: ChatMessage }) {
+function MessageRow({
+  msg,
+  avatarSrc,
+  avatarAlt,
+}: {
+  msg: ChatMessage;
+  avatarSrc?: string;
+  avatarAlt?: string;
+}) {
   const isMe = msg.author === "me";
+  const avatarPosition = avatarAlt
+    ? AVATAR_POSITION_BY_NAME[avatarAlt.toLowerCase()] ?? "center 22%"
+    : "center 22%";
 
   return (
     <div className={`flex items-end gap-2 ${isMe ? "justify-end" : "justify-start"}`}>
-      {!isMe && <div className="h-8 w-8 shrink-0 rounded-full border border-[#f0c67a]/70 bg-[#a66b2e]" />}
+      {!isMe &&
+        (avatarSrc ? (
+          <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-full border-[3px] border-[#f7d48f] bg-[radial-gradient(circle_at_30%_20%,#fce8be_0%,#c58a43_45%,#6b3f1e_100%)] shadow-[0_7px_18px_rgba(0,0,0,0.45)] ring-1 ring-[#fff1cc]/40">
+            <Image
+              src={avatarSrc}
+              alt={avatarAlt ? `${avatarAlt} portrait` : "Character portrait"}
+              fill
+              sizes="48px"
+              className="scale-[1.22] object-cover contrast-110 saturate-110"
+              style={{ objectPosition: avatarPosition }}
+            />
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.3)_0%,rgba(255,255,255,0)_48%),linear-gradient(180deg,rgba(0,0,0,0)_58%,rgba(0,0,0,0.25)_100%)]" />
+          </div>
+        ) : (
+          <div className="h-12 w-12 shrink-0 rounded-full border-[3px] border-[#f7d48f] bg-[radial-gradient(circle_at_30%_20%,#fce8be_0%,#c58a43_45%,#6b3f1e_100%)] shadow-[0_7px_18px_rgba(0,0,0,0.45)] ring-1 ring-[#fff1cc]/40" />
+        ))}
 
       <div
         className={[
@@ -227,7 +268,7 @@ function MessageRow({ msg }: { msg: ChatMessage }) {
         <p className="whitespace-pre-wrap break-words">{msg.text}</p>
       </div>
 
-      {isMe && <div className="h-8 w-8 shrink-0 rounded-full border border-[#d7a744] bg-[#4a2a16]" />}
+      {isMe && <div className="h-12 w-12 shrink-0 rounded-full border-[3px] border-[#d7a744] bg-[#4a2a16]" />}
     </div>
   );
 }
