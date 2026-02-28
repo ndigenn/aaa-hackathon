@@ -95,8 +95,9 @@ export default function ChatPageClient({ username, coins, ownedCards }: ChatPage
         reply?: string;
         error?: string;
       };
+      const reply = payload.reply;
 
-      if (!response.ok || !payload.reply) {
+      if (!response.ok || !reply) {
         setMessages((prev) => [
           ...prev,
           {
@@ -113,7 +114,7 @@ export default function ChatPageClient({ username, coins, ownedCards }: ChatPage
         {
           id: crypto.randomUUID(),
           author: "other",
-          text: payload.reply,
+          text: reply,
         },
       ]);
     } catch {
