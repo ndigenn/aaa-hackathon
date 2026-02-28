@@ -242,12 +242,9 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                             Description
                           </p>
                           <p className="mt-1 text-sm text-[#efd8b0]">{card.description}</p>
-                          <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
-                            History
-                          </p>
-                          <div className="mt-3 flex items-center justify-between gap-2">
+                          <div className="mt-4 flex items-center justify-between gap-2">
                             <span className="text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
-                              Hover to view full history
+                              Click to flip back
                             </span>
                             <div
                               className="group relative"
@@ -279,9 +276,6 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                               </div>
                             </div>
                           </div>
-                          <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
-                            Click to flip back
-                          </p>
                         </article>
                       </div>
                     </div>
