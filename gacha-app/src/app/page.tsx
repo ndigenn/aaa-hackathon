@@ -7,7 +7,10 @@ export default function Home() {
       style={{ backgroundImage: "url('/landing_page.png')" }}
     >
       {/* Optional dark overlay for readability */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[url('/western-bg.jpg')] bg-cover bg-center" />
+        <div className="absolute inset-0 bg-black/30" />
+      </div>
 
       {/* Content container */}
       <div className="relative flex min-h-screen flex-col items-center justify-end pb-16">
