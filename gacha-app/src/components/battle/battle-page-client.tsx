@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useRef, useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 
 type BattleCard = {
   id: string;
@@ -109,13 +108,17 @@ function buildPlayerUnits(cards: BattleCard[]) {
   }));
 }
 
-export default function BattlePageClient({ availableCards }: { availableCards: BattleCard[] }) {
-  const searchParams = useSearchParams();
+export default function BattlePageClient({
+  availableCards,
+  initialLoadoutParam,
+}: {
+  availableCards: BattleCard[];
+  initialLoadoutParam: string;
+}) {
   const enemyTurnLock = useRef(false);
 
   const selectedCards = useMemo(() => {
-    const loadoutParam = searchParams.get("loadout") ?? "";
-    const requestedIds = loadoutParam
+    const requestedIds = initialLoadoutParam
       .split(",")
       .map((id) => id.trim())
       .filter(Boolean);
@@ -144,7 +147,7 @@ export default function BattlePageClient({ availableCards }: { availableCards: B
     }
 
     return fallback;
-  }, [availableCards, searchParams]);
+  }, [availableCards, initialLoadoutParam]);
 
   const [playerUnits, setPlayerUnits] = useState<BattleUnit[]>(() =>
     buildPlayerUnits(selectedCards),

@@ -98,3 +98,9 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
     - Bandit Sniper -> `/sniper.png`
   - Battlefield combat panel now renders `field.png` as the battle surface background with a readability overlay.
 - Validation: `npm run lint` passes.
+- Battle page polish/fix:
+  - Page background now uses `field.png` across the full battle page (`src/app/battle/page.tsx`).
+  - Fixed ally card instability by removing client-side `useSearchParams` dependency in battle setup.
+  - Battle loadout now comes from server `searchParams` and is passed as `initialLoadoutParam` prop to battle client, with component keying by loadout.
+  - This prevents stale/empty initial ally units that could look broken in combat.
+- Validation: `npm run lint` passes.

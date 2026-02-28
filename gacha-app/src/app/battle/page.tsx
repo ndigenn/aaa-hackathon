@@ -49,7 +49,24 @@ const CARD_IMAGE_BY_NAME: Record<string, string> = {
   "charles goodnight": "/goodnight.png",
 };
 
-export default async function BattlePage() {
+type SearchParams = {
+  loadout?: string | string[];
+};
+
+export default async function BattlePage({
+  searchParams,
+}: {
+  searchParams?: Promise<SearchParams>;
+}) {
+  const resolvedSearchParams = (await searchParams) ?? {};
+  const rawLoadoutParam = resolvedSearchParams.loadout;
+  const loadoutParam =
+    typeof rawLoadoutParam === "string"
+      ? rawLoadoutParam
+      : Array.isArray(rawLoadoutParam)
+        ? rawLoadoutParam[0] ?? ""
+        : "";
+
   const { username, coins, ownedCardIds } = await getTopNavProfile("/battle");
   const ownedCardIdSet = new Set(ownedCardIds);
   const cardDefinitions = (cardsData.cards ?? []) as CardDefinition[];
@@ -75,12 +92,16 @@ export default async function BattlePage() {
     <main className="relative min-h-screen overflow-hidden text-[#f8e9c6]">
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/cardsbackground.png')" }}
+        style={{ backgroundImage: "url('/field.png')" }}
       />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(12,8,6,0.52)_0%,rgba(20,10,8,0.64)_45%,rgba(25,14,9,0.84)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(12,8,6,0.56)_0%,rgba(20,10,8,0.66)_45%,rgba(25,14,9,0.84)_100%)]" />
 
       <AppTopNav username={username} coins={coins} />
-      <BattlePageClient availableCards={availableCards} />
+      <BattlePageClient
+        key={`battle-${loadoutParam}`}
+        availableCards={availableCards}
+        initialLoadoutParam={loadoutParam}
+      />
       <BottomNav activeHref="/home" />
     </main>
   );
