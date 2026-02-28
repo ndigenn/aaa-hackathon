@@ -133,18 +133,40 @@ async function findUserRecord(client: DynamoDBDocumentClient, userId: string) {
   const scanResponse = await client.send(
     new ScanCommand({
       TableName: tableName,
-      FilterExpression: "userId = :userId OR #sub = :userId OR id = :userId",
+      FilterExpression:
+        "(userId = :userId OR #sub = :userId OR id = :userId OR PK = :pk) AND (attribute_not_exists(SK) OR SK = :profileSk OR begins_with(SK, :profilePrefix))",
       ExpressionAttributeNames: {
         "#sub": "sub",
       },
       ExpressionAttributeValues: {
         ":userId": userId,
+        ":pk": `USER#${userId}`,
+        ":profileSk": "PROFILE",
+        ":profilePrefix": "PROFILE",
       },
-      Limit: 1,
+      Limit: 25,
     }),
   );
 
-  return (scanResponse.Items?.[0] ?? null) as UserRecord | null;
+  const items = (scanResponse.Items ?? []) as UserRecord[];
+  if (items.length === 0) {
+    return null;
+  }
+
+  const exactProfile = items.find((item) => item.SK === "PROFILE");
+  if (exactProfile) {
+    return exactProfile;
+  }
+
+  const profileLike = items.find(
+    (item) =>
+      typeof item.SK === "string" && item.SK.toUpperCase().startsWith("PROFILE"),
+  );
+  if (profileLike) {
+    return profileLike;
+  }
+
+  return items[0] ?? null;
 }
 
 function buildKeyCandidates(record: UserRecord) {
@@ -298,19 +320,21 @@ export async function runSingleSummonForUser(
       cost: SINGLE_SUMMON_COST,
     };
   } catch (error) {
-    if (isValidationException(error)) {
+    if (isValidationException(error) || isConditionalCheckFailed(error)) {
       try {
-        const remainingCoins = await runListSummonUpdate(
-          client,
-          defaultKey,
-          drawnCard.id,
-          nowIso,
-        );
-        return {
-          card: drawnCard,
-          remainingCoins: Number.isFinite(remainingCoins) ? remainingCoins : 0,
-          cost: SINGLE_SUMMON_COST,
-        };
+        if (isValidationException(error)) {
+          const remainingCoins = await runListSummonUpdate(
+            client,
+            defaultKey,
+            drawnCard.id,
+            nowIso,
+          );
+          return {
+            card: drawnCard,
+            remainingCoins: Number.isFinite(remainingCoins) ? remainingCoins : 0,
+            cost: SINGLE_SUMMON_COST,
+          };
+        }
       } catch (fallbackError) {
         if (isConditionalCheckFailed(fallbackError)) {
           throw new SummonError(
