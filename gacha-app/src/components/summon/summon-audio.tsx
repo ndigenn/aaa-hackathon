@@ -7,7 +7,7 @@ const DUCKED_BGM_VOLUME = 0.1;
 
 export default function SummonAudio() {
   useEffect(() => {
-    const bgm = new Audio("/pianoSaloon.mp3");
+    const bgm = new Audio("/summon.mp3");
     bgm.loop = true;
     bgm.preload = "auto";
     bgm.volume = NORMAL_BGM_VOLUME;

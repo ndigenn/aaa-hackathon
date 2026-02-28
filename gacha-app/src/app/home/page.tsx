@@ -40,6 +40,8 @@ export default async function HomePage() {
 
   return (
     <main className="relative min-h-screen overflow-hidden text-[#f8e9c6]">
+      <audio src="/home.mp3" autoPlay loop preload="auto" className="hidden" />
+
       <div
         className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/homepage.png')" }}

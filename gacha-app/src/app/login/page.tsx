@@ -32,6 +32,8 @@ export default function LoginPage() {
 
     return (
         <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+            <audio src="/home.mp3" autoPlay loop preload="auto" className="hidden" />
+
             {/* Western Background */}
             <div className="absolute inset-0 bg-gradient-to-b from-orange-300 via-amber-400 to-yellow-600" />
             <div className="absolute inset-0 bg-[url('/western-bg.jpg')] bg-cover bg-center opacity-20" />
