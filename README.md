@@ -1,7 +1,7 @@
 # AAA CUhackit 2026
 
 Authors:
-- Blake 
-- Lilah
-- Bryson
-- Nick
+- Blake Boulanger
+- Lilah Smith
+- Bryson Newman
+- Nick DiGennaro
