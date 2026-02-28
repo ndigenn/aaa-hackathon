@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type BattleCard = {
   id: string;
@@ -32,6 +32,12 @@ type BattleUnit = {
   bonusAttack: number;
   vulnerableTurns: number;
   abilities: BattleCard["abilities"];
+};
+
+type AttackAnimation = {
+  attackerId: string;
+  targetId: string;
+  kind: string;
 };
 
 const ENEMY_TEAM_TEMPLATE: BattleUnit[] = [
@@ -79,6 +85,23 @@ const ENEMY_TEAM_TEMPLATE: BattleUnit[] = [
   },
 ];
 
+const ANIMATION_LIST = [
+  "Quick Slash: fast swipe hit",
+  "Heavy Swing: bruiser slam",
+  "Marked Shot: sniper burst",
+  "Heal Pulse: recover lowest ally",
+  "Buff Aura: increase ally attack",
+  "Vulnerable Mark: target takes extra damage",
+  "Critical Burst: amplified DPS strike",
+  "KO Mark: red X on defeated unit",
+];
+
+function sleep(ms: number) {
+  return new Promise<void>((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
 function clampHp(unit: BattleUnit) {
   return { ...unit, hp: Math.max(0, Math.min(unit.hp, unit.maxHp)) };
 }
@@ -108,6 +131,27 @@ function buildPlayerUnits(cards: BattleCard[]) {
   }));
 }
 
+function getPlayerAnimationKind(attacker: BattleUnit) {
+  switch (attacker.type) {
+    case "Healer":
+      return "Heal Pulse";
+    case "Support":
+      return "Buff Aura";
+    case "Debuffer":
+      return "Vulnerable Mark";
+    case "Tank":
+      return "Shield Bash";
+    default:
+      return "Quick Slash";
+  }
+}
+
+function getEnemyAnimationKind(enemy: BattleUnit) {
+  if (enemy.name.includes("Sniper")) return "Marked Shot";
+  if (enemy.name.includes("Bruiser")) return "Heavy Swing";
+  return "Quick Slash";
+}
+
 export default function BattlePageClient({
   availableCards,
   initialLoadoutParam,
@@ -116,6 +160,7 @@ export default function BattlePageClient({
   initialLoadoutParam: string;
 }) {
   const enemyTurnLock = useRef(false);
+  const animationTimerRef = useRef<number | null>(null);
 
   const selectedCards = useMemo(() => {
     const requestedIds = initialLoadoutParam
@@ -164,12 +209,44 @@ export default function BattlePageClient({
   const [selectedAttackerId, setSelectedAttackerId] = useState<string | null>(null);
   const [draggingUnitId, setDraggingUnitId] = useState<string | null>(null);
   const [turnNumber, setTurnNumber] = useState(1);
+  const [attackAnimation, setAttackAnimation] = useState<AttackAnimation | null>(null);
+
+  const playerUnitsRef = useRef(playerUnits);
+  const enemyUnitsRef = useRef(enemyUnits);
+
+  useEffect(() => {
+    playerUnitsRef.current = playerUnits;
+  }, [playerUnits]);
+
+  useEffect(() => {
+    enemyUnitsRef.current = enemyUnits;
+  }, [enemyUnits]);
+
+  useEffect(() => {
+    return () => {
+      if (animationTimerRef.current !== null) {
+        window.clearTimeout(animationTimerRef.current);
+      }
+    };
+  }, []);
 
   const canBattle = selectedCards.length === 3;
 
   function appendLogs(lines: string[]) {
     if (lines.length === 0) return;
-    setLogLines((current) => [...current, ...lines].slice(-14));
+    setLogLines((current) => [...current, ...lines].slice(-16));
+  }
+
+  function playAnimation(kind: string, attackerId: string, targetId: string, duration = 480) {
+    if (animationTimerRef.current !== null) {
+      window.clearTimeout(animationTimerRef.current);
+    }
+
+    setAttackAnimation({ attackerId, targetId, kind });
+    animationTimerRef.current = window.setTimeout(() => {
+      setAttackAnimation(null);
+      animationTimerRef.current = null;
+    }, duration);
   }
 
   function applyPlayerAbility(
@@ -180,8 +257,9 @@ export default function BattlePageClient({
     baseDamage: number,
   ) {
     let nextPlayers = [...currentPlayers];
-      const nextEnemies = [...currentEnemies];
+    const nextEnemies = [...currentEnemies];
     let damage = baseDamage;
+    let attackKind = getPlayerAnimationKind(attacker);
     const abilityLog: string[] = [];
 
     switch (attacker.type) {
@@ -198,7 +276,7 @@ export default function BattlePageClient({
             ...nextPlayers[healIndex],
             hp: nextPlayers[healIndex].hp + healAmount,
           });
-          abilityLog.push(`${attacker.name} uses healing support (+${healAmount} HP).`);
+          abilityLog.push(`[Heal Pulse] ${attacker.name} restores ${healAmount} HP.`);
         }
         break;
       }
@@ -206,7 +284,7 @@ export default function BattlePageClient({
         nextPlayers = nextPlayers.map((unit) =>
           unit.hp > 0 ? { ...unit, bonusAttack: Math.min(unit.bonusAttack + 10, 30) } : unit,
         );
-        abilityLog.push(`${attacker.name} buffs allied attack.`);
+        abilityLog.push(`[Buff Aura] ${attacker.name} raises ally attack.`);
         break;
       }
       case "Debuffer": {
@@ -215,7 +293,7 @@ export default function BattlePageClient({
           ...target,
           vulnerableTurns: Math.max(target.vulnerableTurns, 2),
         };
-        abilityLog.push(`${attacker.name} inflicts Vulnerable on ${target.name}.`);
+        abilityLog.push(`[Vulnerable Mark] ${target.name} is exposed.`);
         break;
       }
       case "Tank": {
@@ -227,7 +305,7 @@ export default function BattlePageClient({
             hp: nextPlayers[selfIndex].hp + 28,
           });
         }
-        abilityLog.push(`${attacker.name} fortifies and shrugs off damage.`);
+        abilityLog.push(`[Shield Bash] ${attacker.name} braces and counter-slams.`);
         break;
       }
       default: {
@@ -236,20 +314,25 @@ export default function BattlePageClient({
           const critTrigger = (turnNumber + attackerSlot + targetIndex) % 3 === 0;
           if (critTrigger) {
             damage = Math.round(damage * 1.7);
-            abilityLog.push(`${attacker.name} lands a critical ability strike!`);
+            attackKind = "Critical Burst";
+            abilityLog.push(`[Critical Burst] ${attacker.name} lands a critical strike.`);
           }
         }
       }
     }
 
-    return { nextPlayers, nextEnemies, damage, abilityLog };
+    return { nextPlayers, nextEnemies, damage, abilityLog, attackKind };
   }
 
   function resolvePlayerAttack(attackerId: string, targetId: string) {
     if (phase !== "player" || winner || !canBattle) return;
 
-    const attackerIndex = playerUnits.findIndex((unit) => unit.unitId === attackerId && unit.hp > 0);
-    const targetIndex = enemyUnits.findIndex((unit) => unit.unitId === targetId && unit.hp > 0);
+    const attackerIndex = playerUnits.findIndex(
+      (unit) => unit.unitId === attackerId && unit.hp > 0,
+    );
+    const targetIndex = enemyUnits.findIndex(
+      (unit) => unit.unitId === targetId && unit.hp > 0,
+    );
 
     if (attackerIndex < 0 || targetIndex < 0) return;
 
@@ -257,12 +340,15 @@ export default function BattlePageClient({
     if (attacker.acted) return;
 
     const target = enemyUnits[targetIndex];
-    let computedDamage = Math.max(20, attacker.attack + attacker.bonusAttack + randomInt(-8, 12));
+    let computedDamage = Math.max(
+      20,
+      attacker.attack + attacker.bonusAttack + randomInt(-8, 12),
+    );
     if (target.vulnerableTurns > 0) {
       computedDamage = Math.round(computedDamage * 1.2);
     }
 
-    const { nextPlayers, nextEnemies, damage, abilityLog } = applyPlayerAbility(
+    const { nextPlayers, nextEnemies, damage, abilityLog, attackKind } = applyPlayerAbility(
       attacker,
       playerUnits,
       enemyUnits,
@@ -270,37 +356,35 @@ export default function BattlePageClient({
       computedDamage,
     );
 
-    const enemyAfterHit = clampHp({
+    nextEnemies[targetIndex] = clampHp({
       ...nextEnemies[targetIndex],
       hp: nextEnemies[targetIndex].hp - damage,
       vulnerableTurns: Math.max(0, nextEnemies[targetIndex].vulnerableTurns - 1),
     });
-    nextEnemies[targetIndex] = enemyAfterHit;
 
     nextPlayers[attackerIndex] = {
       ...nextPlayers[attackerIndex],
       acted: true,
     };
 
-    const actionLogs = [
-      `${attacker.name} hits ${target.name} for ${damage} damage.`,
-      ...abilityLog,
-    ];
+    playAnimation(attackKind, attacker.unitId, target.unitId);
 
     setPlayerUnits(nextPlayers);
     setEnemyUnits(nextEnemies);
     setSelectedAttackerId(null);
-    appendLogs(actionLogs);
+    appendLogs([
+      `[${attackKind}] ${attacker.name} hits ${target.name} for ${damage}.`,
+      ...abilityLog,
+    ]);
 
     if (aliveUnits(nextEnemies).length === 0) {
       setWinner("player");
       setPhase("finished");
-      appendLogs(["You won the battle."]);
+      appendLogs(["Victory! Enemy team eliminated."]);
       return;
     }
 
-    const alivePlayers = aliveUnits(nextPlayers);
-    const allAlivePlayerUnitsActed = alivePlayers.every((unit) => unit.acted);
+    const allAlivePlayerUnitsActed = aliveUnits(nextPlayers).every((unit) => unit.acted);
     if (allAlivePlayerUnitsActed) {
       setPhase("enemy");
       appendLogs(["Enemy turn starts."]);
@@ -311,12 +395,15 @@ export default function BattlePageClient({
     if (phase !== "enemy" || winner || enemyTurnLock.current) return;
 
     enemyTurnLock.current = true;
-    const timeout = window.setTimeout(() => {
-      let nextPlayers = [...playerUnits];
-      const nextEnemies = [...enemyUnits];
-      const newLogs: string[] = [];
+    let cancelled = false;
+
+    const runEnemyTurn = async () => {
+      let nextPlayers = [...playerUnitsRef.current];
+      const nextEnemies = [...enemyUnitsRef.current];
+      const roundLogs: string[] = [];
 
       for (const enemy of nextEnemies) {
+        if (cancelled) return;
         if (enemy.hp <= 0) continue;
 
         const alivePlayerIndexes = nextPlayers
@@ -327,23 +414,33 @@ export default function BattlePageClient({
         if (alivePlayerIndexes.length === 0) break;
 
         const targetIndex = alivePlayerIndexes[randomInt(0, alivePlayerIndexes.length - 1)];
+        const target = nextPlayers[targetIndex];
         const damage = Math.max(16, enemy.attack + randomInt(-6, 10));
+        const attackKind = getEnemyAnimationKind(enemy);
+
+        playAnimation(attackKind, enemy.unitId, target.unitId, 420);
+        await sleep(360);
 
         nextPlayers[targetIndex] = clampHp({
           ...nextPlayers[targetIndex],
           hp: nextPlayers[targetIndex].hp - damage,
         });
 
-        newLogs.push(`${enemy.name} strikes ${nextPlayers[targetIndex].name} for ${damage}.`);
+        setPlayerUnits([...nextPlayers]);
+        roundLogs.push(`[${attackKind}] ${enemy.name} hits ${target.name} for ${damage}.`);
+        appendLogs([roundLogs[roundLogs.length - 1]]);
+
+        await sleep(260);
       }
+
+      if (cancelled) return;
 
       if (aliveUnits(nextPlayers).length === 0) {
         setPlayerUnits(nextPlayers);
         setEnemyUnits(nextEnemies);
-        appendLogs(newLogs);
         setWinner("enemy");
         setPhase("finished");
-        appendLogs(["Your team was defeated."]);
+        appendLogs(["Loss! Your team was defeated."]);
         enemyTurnLock.current = false;
         return;
       }
@@ -358,30 +455,53 @@ export default function BattlePageClient({
       setEnemyUnits(nextEnemies);
       setTurnNumber((turn) => turn + 1);
       setPhase("player");
-      appendLogs([...newLogs, "Your turn starts."]);
-      enemyTurnLock.current = false;
-    }, 700);
-
-    return () => {
-      window.clearTimeout(timeout);
+      appendLogs(["Your turn starts."]);
       enemyTurnLock.current = false;
     };
-  }, [enemyUnits, phase, playerUnits, winner]);
+
+    void runEnemyTurn();
+
+    return () => {
+      cancelled = true;
+      enemyTurnLock.current = false;
+    };
+  }, [phase, winner]);
 
   function handleResetBattle() {
-    const resetPlayers = buildPlayerUnits(selectedCards);
-
-    setPlayerUnits(resetPlayers);
+    setPlayerUnits(buildPlayerUnits(selectedCards));
     setEnemyUnits(ENEMY_TEAM_TEMPLATE.map((unit) => ({ ...unit })));
     setPhase("player");
     setWinner(null);
     setSelectedAttackerId(null);
     setDraggingUnitId(null);
     setTurnNumber(1);
+    setAttackAnimation(null);
     setLogLines([
       "Battle reset. Drag a friendly card onto an enemy card to attack.",
       "Each card acts once per turn.",
     ]);
+  }
+
+  function getAnimatedUnitStyle(unitId: string, defeated: boolean) {
+    const isAttacker = attackAnimation?.attackerId === unitId;
+    const isTarget = attackAnimation?.targetId === unitId;
+
+    return {
+      transform: defeated
+        ? "scale(0.94) rotate(-4deg)"
+        : isAttacker
+          ? "translateY(-8px) scale(1.06)"
+          : isTarget
+            ? "scale(0.92)"
+            : "scale(1)",
+      boxShadow: isTarget
+        ? "0 0 0 2px rgba(239,68,68,0.9), 0 0 18px rgba(239,68,68,0.6)"
+        : isAttacker
+          ? "0 0 16px rgba(250,204,21,0.5)"
+          : "none",
+      filter: defeated ? "grayscale(1)" : "none",
+      transition: "transform 220ms ease, box-shadow 220ms ease, filter 220ms ease",
+    };
   }
 
   if (!canBattle) {
@@ -404,175 +524,244 @@ export default function BattlePageClient({
   }
 
   return (
-    <section className="relative mx-auto w-full max-w-6xl px-4 pb-36 pt-28">
-      <div className="rounded-2xl border border-[#f1cf8e]/45 bg-[#22160f]/70 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.42)]">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h1 className="text-2xl font-extrabold text-[#ffe8b8]">Simple Battle</h1>
-            <p className="text-sm text-[#efd8b0]">
-              Turn {turnNumber} • {phase === "player" ? "Your turn" : phase === "enemy" ? "Enemy turn" : "Battle ended"}
-            </p>
-          </div>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={handleResetBattle}
-              className="rounded-lg border border-[#f0c67a]/55 bg-[#3a2348]/75 px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[#ffe8b8]"
-            >
-              Reset
-            </button>
-            <Link
-              href="/home"
-              className="rounded-lg border border-[#ffe3a6]/80 bg-[linear-gradient(180deg,#ffdf95_0%,#d6a43d_100%)] px-3 py-2 text-xs font-extrabold uppercase tracking-[0.08em] text-[#4a2b16]"
-            >
-              Loadout
-            </Link>
-          </div>
-        </div>
-
-        <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_320px]">
-          <div className="relative overflow-hidden rounded-xl border border-[#f0c67a]/35 p-3">
-            <div
-              className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: "url('/field.png')" }}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(15,10,8,0.52)_0%,rgba(18,12,9,0.6)_46%,rgba(21,14,10,0.76)_100%)]" />
-            <div className="relative">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">Enemy Line</p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {enemyUnits.map((unit) => {
-                const defeated = unit.hp <= 0;
-                return (
-                  <button
-                    key={unit.unitId}
-                    type="button"
-                    onClick={() => {
-                      if (selectedAttackerId) {
-                        resolvePlayerAttack(selectedAttackerId, unit.unitId);
-                      }
-                    }}
-                    onDragOver={(event) => {
-                      if (phase === "player") event.preventDefault();
-                    }}
-                    onDrop={(event) => {
-                      event.preventDefault();
-                      const fromData = event.dataTransfer.getData("text/plain");
-                      const attackerId = fromData || draggingUnitId;
-                      if (attackerId) {
-                        resolvePlayerAttack(attackerId, unit.unitId);
-                      }
-                      setDraggingUnitId(null);
-                    }}
-                    className={`rounded-lg border p-2 text-left transition ${
-                      defeated
-                        ? "border-white/15 bg-black/30 opacity-40"
-                        : "border-[#f0c67a]/45 bg-[#4a2a1d]/70 hover:border-[#ffdba1]"
-                    }`}
-                  >
-                    <div className="mx-auto h-24 w-16 overflow-hidden rounded-md border border-[#f3cd86]/50 bg-[#2a1b12]">
-                      <Image
-                        src={unit.imageSrc}
-                        alt={unit.name}
-                        width={64}
-                        height={96}
-                        className="h-full w-full object-contain p-1"
-                      />
-                    </div>
-                    <p className="mt-2 text-sm font-bold text-[#ffe8b8]">{unit.name}</p>
-                    <p className="text-[10px] uppercase tracking-[0.1em] text-[#f4cd84]">
-                      HP {unit.hp}/{unit.maxHp}
-                    </p>
-                    {unit.vulnerableTurns > 0 ? (
-                      <p className="mt-1 text-[10px] text-[#ffdca0]">Vulnerable ({unit.vulnerableTurns})</p>
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
-
-            <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">Your Team</p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {playerUnits.map((unit) => {
-                const defeated = unit.hp <= 0;
-                const canAct = phase === "player" && !unit.acted && !defeated && !winner;
-                const selected = selectedAttackerId === unit.unitId;
-                const ability = unit.abilities[0];
-
-                return (
-                  <button
-                    key={unit.unitId}
-                    type="button"
-                    draggable={canAct}
-                    onClick={() => {
-                      if (canAct) {
-                        setSelectedAttackerId((current) =>
-                          current === unit.unitId ? null : unit.unitId,
-                        );
-                      }
-                    }}
-                    onDragStart={(event) => {
-                      setDraggingUnitId(unit.unitId);
-                      event.dataTransfer.setData("text/plain", unit.unitId);
-                    }}
-                    onDragEnd={() => setDraggingUnitId(null)}
-                    className={`rounded-lg border p-2 text-left transition ${
-                      defeated
-                        ? "border-white/15 bg-black/30 opacity-40"
-                        : selected
-                          ? "border-[#ffe3a8] bg-[#5a3320]/85"
-                          : canAct
-                            ? "border-[#f0c67a]/55 bg-[#3b2248]/78 hover:border-[#ffdba1]"
-                            : "border-[#f0c67a]/30 bg-[#3b2248]/48"
-                    }`}
-                  >
-                    <div className="mx-auto h-24 w-16 overflow-hidden rounded-md border border-[#f3cd86]/50 bg-[#2a1b12]">
-                      <Image
-                        src={unit.imageSrc}
-                        alt={unit.name}
-                        width={64}
-                        height={96}
-                        className="h-full w-full object-contain p-1"
-                      />
-                    </div>
-                    <p className="mt-2 text-sm font-bold text-[#ffe8b8]">{unit.name}</p>
-                    <p className="text-[10px] uppercase tracking-[0.1em] text-[#f4cd84]">
-                      HP {unit.hp}/{unit.maxHp} • ATK {unit.attack + unit.bonusAttack}
-                    </p>
-                    {ability ? (
-                      <p className="mt-1 line-clamp-2 text-[10px] text-[#f0ddb9]">
-                        {ability.name}: {ability.description}
-                      </p>
-                    ) : null}
-                    {unit.acted && !defeated ? (
-                      <p className="mt-1 text-[10px] font-semibold text-[#ffdca0]">Acted this turn</p>
-                    ) : null}
-                  </button>
-                );
-              })}
-            </div>
-            </div>
-          </div>
-
-          <aside className="rounded-xl border border-[#f0c67a]/35 bg-[#2a1b12]/55 p-3">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">Battle Log</p>
-            <div className="mt-2 h-[360px] overflow-auto rounded-md border border-[#f0c67a]/20 bg-black/25 p-2">
-              {logLines.map((line, index) => (
-                <p key={`${line}-${index}`} className="mb-1 text-xs text-[#efd8b0]">
-                  {line}
-                </p>
-              ))}
-            </div>
-            <p className="mt-2 text-[10px] text-[#efd8b0]">
-              Tip: Drag a friendly card and drop it on an enemy to attack.
-            </p>
-            {winner ? (
-              <p className="mt-3 rounded-md border border-[#f0c67a]/40 bg-[#3a2348]/60 px-2 py-2 text-sm font-bold text-[#ffe8b8]">
-                {winner === "player" ? "Victory" : "Defeat"}
+    <>
+      <section className="relative mx-auto w-full max-w-6xl px-4 pb-36 pt-28">
+        <div className="rounded-2xl border border-[#f1cf8e]/45 bg-[#22160f]/70 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.42)]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h1 className="text-2xl font-extrabold text-[#ffe8b8]">Simple Battle</h1>
+              <p className="text-sm text-[#efd8b0]">
+                Turn {turnNumber} •{" "}
+                {phase === "player"
+                  ? "Your turn"
+                  : phase === "enemy"
+                    ? "Enemy turn"
+                    : "Battle ended"}
               </p>
-            ) : null}
-          </aside>
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={handleResetBattle}
+                className="rounded-lg border border-[#f0c67a]/55 bg-[#3a2348]/75 px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[#ffe8b8]"
+              >
+                Reset
+              </button>
+              <Link
+                href="/home"
+                className="rounded-lg border border-[#ffe3a6]/80 bg-[linear-gradient(180deg,#ffdf95_0%,#d6a43d_100%)] px-3 py-2 text-xs font-extrabold uppercase tracking-[0.08em] text-[#4a2b16]"
+              >
+                Loadout
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_320px]">
+            <div className="relative overflow-hidden rounded-xl border border-[#f0c67a]/35 p-3">
+              <div
+                className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: "url('/field.png')" }}
+              />
+              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(15,10,8,0.52)_0%,rgba(18,12,9,0.6)_46%,rgba(21,14,10,0.76)_100%)]" />
+
+              <div className="relative">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">
+                  Enemy Line
+                </p>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {enemyUnits.map((unit) => {
+                    const defeated = unit.hp <= 0;
+                    return (
+                      <button
+                        key={unit.unitId}
+                        type="button"
+                        onClick={() => {
+                          if (selectedAttackerId) {
+                            resolvePlayerAttack(selectedAttackerId, unit.unitId);
+                          }
+                        }}
+                        onDragOver={(event) => {
+                          if (phase === "player") event.preventDefault();
+                        }}
+                        onDrop={(event) => {
+                          event.preventDefault();
+                          const fromData = event.dataTransfer.getData("text/plain");
+                          const attackerId = fromData || draggingUnitId;
+                          if (attackerId) {
+                            resolvePlayerAttack(attackerId, unit.unitId);
+                          }
+                          setDraggingUnitId(null);
+                        }}
+                        style={getAnimatedUnitStyle(unit.unitId, defeated)}
+                        className={`relative rounded-lg border p-2 text-left ${
+                          defeated
+                            ? "border-red-500/70 bg-black/45"
+                            : "border-[#f0c67a]/45 bg-[#4a2a1d]/70 hover:border-[#ffdba1]"
+                        }`}
+                      >
+                        <div className="mx-auto h-24 w-16 overflow-hidden rounded-md border border-[#f3cd86]/50 bg-[#2a1b12]">
+                          <Image
+                            src={unit.imageSrc}
+                            alt={unit.name}
+                            width={64}
+                            height={96}
+                            className="h-full w-full object-contain p-1"
+                          />
+                        </div>
+                        <p className="mt-2 text-sm font-bold text-[#ffe8b8]">{unit.name}</p>
+                        <p className="text-[10px] uppercase tracking-[0.1em] text-[#f4cd84]">
+                          HP {unit.hp}/{unit.maxHp}
+                        </p>
+                        {unit.vulnerableTurns > 0 ? (
+                          <p className="mt-1 text-[10px] text-[#ffdca0]">
+                            Vulnerable ({unit.vulnerableTurns})
+                          </p>
+                        ) : null}
+                        {defeated ? (
+                          <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg bg-red-900/35">
+                            <span className="text-4xl font-black text-red-400">X</span>
+                          </div>
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <p className="mb-2 mt-4 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">
+                  Your Team
+                </p>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  {playerUnits.map((unit) => {
+                    const defeated = unit.hp <= 0;
+                    const canAct = phase === "player" && !unit.acted && !defeated && !winner;
+                    const selected = selectedAttackerId === unit.unitId;
+                    const ability = unit.abilities[0];
+
+                    return (
+                      <button
+                        key={unit.unitId}
+                        type="button"
+                        draggable={canAct}
+                        onClick={() => {
+                          if (canAct) {
+                            setSelectedAttackerId((current) =>
+                              current === unit.unitId ? null : unit.unitId,
+                            );
+                          }
+                        }}
+                        onDragStart={(event) => {
+                          setDraggingUnitId(unit.unitId);
+                          event.dataTransfer.setData("text/plain", unit.unitId);
+                        }}
+                        onDragEnd={() => setDraggingUnitId(null)}
+                        style={getAnimatedUnitStyle(unit.unitId, defeated)}
+                        className={`relative rounded-lg border p-2 text-left ${
+                          defeated
+                            ? "border-red-500/70 bg-black/45"
+                            : selected
+                              ? "border-[#ffe3a8] bg-[#5a3320]/85"
+                              : canAct
+                                ? "border-[#f0c67a]/55 bg-[#3b2248]/78 hover:border-[#ffdba1]"
+                                : "border-[#f0c67a]/30 bg-[#3b2248]/48"
+                        }`}
+                      >
+                        <div className="mx-auto h-24 w-16 overflow-hidden rounded-md border border-[#f3cd86]/50 bg-[#2a1b12]">
+                          <Image
+                            src={unit.imageSrc}
+                            alt={unit.name}
+                            width={64}
+                            height={96}
+                            className="h-full w-full object-contain p-1"
+                          />
+                        </div>
+                        <p className="mt-2 text-sm font-bold text-[#ffe8b8]">{unit.name}</p>
+                        <p className="text-[10px] uppercase tracking-[0.1em] text-[#f4cd84]">
+                          HP {unit.hp}/{unit.maxHp} • ATK {unit.attack + unit.bonusAttack}
+                        </p>
+                        {ability ? (
+                          <p className="mt-1 line-clamp-2 text-[10px] text-[#f0ddb9]">
+                            {ability.name}: {ability.description}
+                          </p>
+                        ) : null}
+                        {unit.acted && !defeated ? (
+                          <p className="mt-1 text-[10px] font-semibold text-[#ffdca0]">
+                            Acted this turn
+                          </p>
+                        ) : null}
+                        {defeated ? (
+                          <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-lg bg-red-900/35">
+                            <span className="text-4xl font-black text-red-400">X</span>
+                          </div>
+                        ) : null}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <aside className="rounded-xl border border-[#f0c67a]/35 bg-[#2a1b12]/55 p-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">
+                Battle Log
+              </p>
+              <div className="mt-2 h-[240px] overflow-auto rounded-md border border-[#f0c67a]/20 bg-black/25 p-2">
+                {logLines.map((line, index) => (
+                  <p key={`${line}-${index}`} className="mb-1 text-xs text-[#efd8b0]">
+                    {line}
+                  </p>
+                ))}
+              </div>
+
+              <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-[#f4cd84]">
+                Animation List
+              </p>
+              <div className="mt-2 rounded-md border border-[#f0c67a]/20 bg-black/25 p-2">
+                {ANIMATION_LIST.map((item) => (
+                  <p key={item} className="mb-1 text-[11px] text-[#efd8b0] last:mb-0">
+                    {item}
+                  </p>
+                ))}
+              </div>
+
+              <p className="mt-2 text-[10px] text-[#efd8b0]">
+                Tip: Drag a friendly card and drop it on an enemy to attack.
+              </p>
+            </aside>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {winner ? (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/70 px-4">
+          <div className="w-full max-w-sm rounded-2xl border border-[#f0c67a]/55 bg-[linear-gradient(160deg,#2c1c37_0%,#3b2248_55%,#4a2a1d_100%)] p-6 text-center shadow-[0_18px_50px_rgba(0,0,0,0.58)]">
+            <p className="text-xs uppercase tracking-[0.18em] text-[#f4cd84]">Battle Result</p>
+            <h2 className="mt-2 text-3xl font-extrabold text-[#ffe8b8]">
+              {winner === "player" ? "Victory!" : "Loss!"}
+            </h2>
+            <p className="mt-3 text-sm text-[#efd8b0]">
+              {winner === "player"
+                ? "Your team dominated the battlefield."
+                : "The bandits won this round."}
+            </p>
+
+            <div className="mt-5 flex justify-center gap-2">
+              <button
+                type="button"
+                onClick={handleResetBattle}
+                className="rounded-lg border border-[#f0c67a]/55 bg-[#3a2348]/75 px-3 py-2 text-xs font-bold uppercase tracking-[0.08em] text-[#ffe8b8]"
+              >
+                Rematch
+              </button>
+              <Link
+                href="/home"
+                className="rounded-lg border border-[#ffe3a6]/80 bg-[linear-gradient(180deg,#ffdf95_0%,#d6a43d_100%)] px-3 py-2 text-xs font-extrabold uppercase tracking-[0.08em] text-[#4a2b16]"
+              >
+                Main Menu
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

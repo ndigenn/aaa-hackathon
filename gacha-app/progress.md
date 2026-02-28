@@ -104,3 +104,13 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Battle loadout now comes from server `searchParams` and is passed as `initialLoadoutParam` prop to battle client, with component keying by loadout.
   - This prevents stale/empty initial ally units that could look broken in combat.
 - Validation: `npm run lint` passes.
+- Battle animation upgrade:
+  - Added explicit attack animation state in `src/components/battle/battle-page-client.tsx` with visible attacker/target motion/highlights.
+  - Added per-attack animation names in combat log and a dedicated "Animation List" panel in battle sidebar.
+  - Enemy turn now animates one-by-one with delays per enemy strike instead of all hits resolving at once.
+  - Added clearer death visuals:
+    - Defeated units now grayscale, dim, and display a prominent red `X` overlay.
+  - Added end-of-battle center popup modal:
+    - Shows `Victory!` or `Loss!`.
+    - Includes `Main Menu` button and `Rematch` button.
+- Validation: `npm run lint` passes.
