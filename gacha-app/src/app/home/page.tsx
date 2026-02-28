@@ -28,42 +28,35 @@ export default function HomePage() {
       </header>
 
       <section className="relative mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-6 pb-36 pt-28">
-        <div className="w-full rounded-2xl border border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)] p-5 shadow-[0_16px_45px_rgba(18,8,5,0.55)]">
+        <div className="w-full rounded-2xl border border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)] p-6 shadow-[0_16px_45px_rgba(18,8,5,0.55)]">
           <p className="text-center text-xs font-semibold uppercase tracking-[0.24em] text-[#f4cd84]">
-            Frontier Banner
+            Welcome Back
           </p>
-          <h1 className="mt-2 text-center text-2xl font-extrabold text-[#ffe8b8]">
-            Outlaw Legends Summon
+          <h1 className="mt-2 text-center text-3xl font-extrabold text-[#ffe8b8]">
+            Saddle Up, Cowgirl
           </h1>
-          <p className="mt-2 text-center text-sm text-[#efd8b0]">
-            Ride for rare sheriffs, bounty hunters, and mythic gunslingers.
+          <p className="mt-3 text-center text-sm text-[#efd8b0]">
+            Your next legendary pull is waiting in Summon. Visit the banner page to choose your target.
           </p>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 text-center">
-            <div className="rounded-xl border border-[#f2cd86]/30 bg-[#3a2348]/65 px-3 py-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-[#d7b07a]">
-                Legendary Rate
-              </p>
-              <p className="mt-1 text-lg font-bold text-[#ffd677]">3.0%</p>
-            </div>
-            <div className="rounded-xl border border-[#f2cd86]/30 bg-[#3a2348]/65 px-3 py-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-[#d7b07a]">
-                Next Free Pull
-              </p>
-              <p className="mt-1 text-lg font-bold text-[#ffd677]">02:14:09</p>
-            </div>
+          <div className="mt-6 grid grid-cols-2 gap-3">
+            <Link
+              href="/summon"
+              className="rounded-xl border border-[#ffe2a0]/80 bg-[linear-gradient(180deg,#ffdc8f_0%,#d7a744_100%)] px-4 py-3 text-center text-sm font-extrabold uppercase tracking-[0.08em] text-[#4a2a16] transition hover:brightness-105"
+            >
+              Go To Summon
+            </Link>
+            <Link
+              href="/cards"
+              className="rounded-xl border border-[#f2cd86]/40 bg-[#3a2348]/65 px-4 py-3 text-center text-sm font-extrabold uppercase tracking-[0.08em] text-[#ffe8b8] transition hover:bg-[#4b2d5f]/80"
+            >
+              View Cards
+            </Link>
           </div>
-
-          <Link
-            href="/summon"
-            className="mt-5 block rounded-xl border border-[#ffe2a0]/80 bg-[linear-gradient(180deg,#ffdc8f_0%,#d7a744_100%)] px-4 py-3 text-center text-base font-extrabold uppercase tracking-[0.08em] text-[#4a2a16] transition hover:brightness-105"
-          >
-            Quick Draw x10
-          </Link>
         </div>
       </section>
 
-      <BottomNav activeHref="/summon" />
+      <BottomNav activeHref="/home" />
     </main>
   );
 }
