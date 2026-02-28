@@ -18,12 +18,22 @@ export default function SignUpPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
+
+        const username = form.username.trim();
+        const email = form.email.trim();
+
+        if (!username || !email) {
+            setError("Please enter both a username and email.");
+            return;
+        }
+
         const params = new URLSearchParams({
             returnTo: "/home",
             screen_hint: "signup",
+            prompt: "login",
         });
 
-        const loginHint = form.email.trim();
+        const loginHint = email;
         if (loginHint) {
             params.set("login_hint", loginHint);
         }
@@ -62,7 +72,9 @@ export default function SignUpPage() {
                         type="text"
                         name="username"
                         placeholder="Username"
+                        value={form.username}
                         onChange={handleChange}
+                        required
                         className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
                     />
 
@@ -70,7 +82,9 @@ export default function SignUpPage() {
                         type="email"
                         name="email"
                         placeholder="Email"
+                        value={form.email}
                         onChange={handleChange}
+                        required
                         className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
                     />
 

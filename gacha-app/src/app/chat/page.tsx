@@ -1,7 +1,7 @@
 import ChatPageClient from "@/components/chat-page-client";
-import { requireAuthenticatedUser } from "@/lib/server-auth";
+import { getTopNavProfile } from "@/lib/user-profile";
 
 export default async function ChatPage() {
-  await requireAuthenticatedUser("/chat");
-  return <ChatPageClient />;
+  const { username, coins } = await getTopNavProfile("/chat");
+  return <ChatPageClient username={username} coins={coins} />;
 }

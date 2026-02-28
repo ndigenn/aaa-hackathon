@@ -1,7 +1,7 @@
 import CardsPageClient from "@/components/cards-page-client";
-import { requireAuthenticatedUser } from "@/lib/server-auth";
+import { getTopNavProfile } from "@/lib/user-profile";
 
 export default async function CardsPage() {
-  await requireAuthenticatedUser("/cards");
-  return <CardsPageClient />;
+  const { username, coins } = await getTopNavProfile("/cards");
+  return <CardsPageClient username={username} coins={coins} />;
 }

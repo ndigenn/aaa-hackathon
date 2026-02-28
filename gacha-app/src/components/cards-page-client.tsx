@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import cardsData from "@/app/cards.json";
+import AppTopNav from "@/components/app-top-nav";
 import BottomNav from "@/components/bottom-nav";
 
 type Card = {
@@ -20,7 +21,15 @@ type Card = {
   }[];
 };
 
-export default function CardsPageClient() {
+type CardsPageClientProps = {
+  username: string;
+  coins: number;
+};
+
+export default function CardsPageClient({
+  username,
+  coins,
+}: CardsPageClientProps) {
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const cards = cardsData.cards as Card[];
 
@@ -38,8 +47,9 @@ export default function CardsPageClient() {
   const visibleCards = sortedCards.filter((card) => card.unlocked);
 
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] px-4 pb-28 pt-8 text-[#f8e9c6]">
-      <section className="mx-auto w-full max-w-xl">
+    <main className="relative min-h-screen bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] px-4 pb-28 pt-8 text-[#f8e9c6]">
+      <AppTopNav username={username} coins={coins} />
+      <section className="mx-auto w-full max-w-xl pt-20">
         <h1 className="text-center text-3xl font-extrabold text-[#ffe8b8]">
           My Cowgirls
         </h1>

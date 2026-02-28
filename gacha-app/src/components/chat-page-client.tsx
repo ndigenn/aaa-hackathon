@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo, useRef, useState, useEffect } from "react";
+import AppTopNav from "@/components/app-top-nav";
 import BottomNav from "@/components/bottom-nav";
 
 type ChatMessage = {
@@ -13,9 +13,12 @@ type ChatMessage = {
 
 const CHANNELS = ["Global", "Guild", "Trade", "Support"];
 
-export default function ChatPageClient() {
-  const username = "Username";
-  const gold = 12345;
+type ChatPageClientProps = {
+  username: string;
+  coins: number;
+};
+
+export default function ChatPageClient({ username, coins }: ChatPageClientProps) {
 
   const [channel, setChannel] = useState(CHANNELS[0]);
   const [input, setInput] = useState("");
@@ -54,27 +57,9 @@ export default function ChatPageClient() {
       <div className="absolute inset-0 bg-[url('/western-bg.jpg')] bg-cover bg-center opacity-15 pointer-events-none" />
 
       <div className="relative flex min-h-screen flex-col">
-        <header className="w-full border-b border-amber-900/30 bg-white/70 backdrop-blur-sm">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-            <div className="font-semibold text-amber-900">{username}</div>
+        <AppTopNav username={username} coins={coins} />
 
-            <div className="flex items-center gap-2">
-              <Image
-                src="/logo.png"
-                alt="AraAra Alliance"
-                width={140}
-                height={50}
-                className="h-10 w-auto"
-              />
-            </div>
-
-            <div className="font-semibold text-amber-900">
-              Gold: <span className="tabular-nums">{gold.toLocaleString()}</span>
-            </div>
-          </div>
-        </header>
-
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-6 pb-24">
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-28">
           <section className="mx-auto max-w-3xl rounded-2xl border-4 border-amber-700 bg-white/90 shadow-2xl backdrop-blur-sm">
             <div className="flex items-center justify-between border-b border-amber-700/30 px-4 py-3">
               <div className="font-semibold text-amber-900">Chat</div>
