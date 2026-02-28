@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import cardsData from "../../src/app/cards.json";
 import BottomNav from "@/components/bottom-nav";
@@ -14,6 +14,7 @@ type Card = {
   description: string;
   unlocked: boolean;
   imagePath?: string;
+  voiceLinePath?: string;
   history?: string;
   abilities: {
     name: string;
@@ -29,6 +30,7 @@ type CardsPageProps = {
 };
 
 export default function CardsPage({ username, coins }: CardsPageProps) {
+  const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const [flippedCardId, setFlippedCardId] = useState<string | null>(null);
   const cards = cardsData.cards as Card[];
 
@@ -44,6 +46,34 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
     return a.name.localeCompare(b.name);
   });
   const visibleCards = sortedCards.filter((card) => card.unlocked);
+
+  function playVoiceLine(voiceLinePath?: string) {
+    if (!voiceLinePath) return;
+
+    if (activeAudioRef.current) {
+      activeAudioRef.current.pause();
+      activeAudioRef.current.currentTime = 0;
+    }
+
+    const audio = new Audio(voiceLinePath);
+    audio.volume = 1;
+    activeAudioRef.current = audio;
+    void audio.play().catch(() => {});
+  }
+
+  function handleCardFlip(card: Card) {
+    playVoiceLine(card.voiceLinePath);
+    setFlippedCardId((current) => (current === card.id ? null : card.id));
+  }
+
+  useEffect(() => {
+    return () => {
+      if (!activeAudioRef.current) return;
+      activeAudioRef.current.pause();
+      activeAudioRef.current.currentTime = 0;
+      activeAudioRef.current = null;
+    };
+  }, []);
 
   return (
     <main className="relative min-h-screen bg-[url('/newcardsbg.png')] bg-cover bg-center bg-no-repeat px-4 pb-28 text-[#f8e9c6]">
@@ -70,17 +100,11 @@ export default function CardsPage({ username, coins }: CardsPageProps) {
                 key={card.id}
                 role="button"
                 tabIndex={0}
-                onClick={() =>
-                  setFlippedCardId((current) =>
-                    current === card.id ? null : card.id,
-                  )
-                }
+                onClick={() => handleCardFlip(card)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter" || event.key === " ") {
                     event.preventDefault();
-                    setFlippedCardId((current) =>
-                      current === card.id ? null : card.id,
-                    );
+                    handleCardFlip(card);
                   }
                 }}
                 className="w-full cursor-pointer text-left"

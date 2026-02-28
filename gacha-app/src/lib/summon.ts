@@ -17,6 +17,7 @@ export type SummonCard = {
   rarity: string;
   description: string;
   imageSrc: string;
+  voiceLinePath?: string;
 };
 
 type CardDefinition = {
@@ -26,6 +27,7 @@ type CardDefinition = {
   rarity: string;
   description: string;
   imagePath?: string;
+  voiceLinePath?: string;
 };
 
 const tableName = process.env.DYNAMODB_USERS_TABLE;
@@ -75,6 +77,7 @@ function mapCardForResponse(card: CardDefinition): SummonCard {
   return {
     ...card,
     imageSrc: card.imagePath ?? "/card.png",
+    voiceLinePath: card.voiceLinePath,
   };
 }
 

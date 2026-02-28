@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 type SummonBanner = {
@@ -24,6 +24,7 @@ type SummonResult = {
     type: string;
     description: string;
     imageSrc: string;
+    voiceLinePath?: string;
   };
   remainingCoins: number;
   cost: number;
@@ -49,6 +50,7 @@ function sleep(ms: number) {
 
 export default function SummonBanners({ initialCoins }: { initialCoins: number }) {
   const router = useRouter();
+  const activeAudioRef = useRef<HTMLAudioElement | null>(null);
   const [currentCoins, setCurrentCoins] = useState(initialCoins);
   const [isSummoning, setIsSummoning] = useState(false);
   const [activeBannerId, setActiveBannerId] = useState<string | null>(null);
@@ -61,6 +63,20 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
     () => SUMMON_BANNERS.find((banner) => banner.id === activeBannerId)?.title ?? "Banner",
     [activeBannerId],
   );
+
+  function playVoiceLine(voiceLinePath?: string) {
+    if (!voiceLinePath) return;
+
+    if (activeAudioRef.current) {
+      activeAudioRef.current.pause();
+      activeAudioRef.current.currentTime = 0;
+    }
+
+    const audio = new Audio(voiceLinePath);
+    audio.volume = 1;
+    activeAudioRef.current = audio;
+    void audio.play().catch(() => {});
+  }
 
   async function handleSingleSummon(bannerId: string) {
     if (isSummoning) return;
@@ -103,6 +119,7 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
       setSummonResult(result);
       setCurrentCoins(result.remainingCoins);
       setIsDrawing(false);
+      playVoiceLine(result.card.voiceLinePath);
       router.refresh();
     } catch {
       setErrorText("Network error while summoning. Please try again.");
@@ -116,6 +133,15 @@ export default function SummonBanners({ initialCoins }: { initialCoins: number }
     setShowReveal(false);
     setIsDrawing(false);
   }
+
+  useEffect(() => {
+    return () => {
+      if (!activeAudioRef.current) return;
+      activeAudioRef.current.pause();
+      activeAudioRef.current.currentTime = 0;
+      activeAudioRef.current = null;
+    };
+  }, []);
 
   return (
     <>

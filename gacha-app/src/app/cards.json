@@ -27,7 +27,8 @@
           "description": "When she dies, reduce the HP of the killer by half."
         }
       ],
-      "imagePath": "/billie.png"
+      "imagePath": "/billie.png",
+      "voiceLinePath": "/billie.mp3"
     },
     {
       "id": "2",
@@ -56,7 +57,8 @@
           "description": "Gains +50% defense when HP drops below 50%."
         }
       ],
-      "imagePath": "/wynne.png"
+      "imagePath": "/wynne.png",
+      "voiceLinePath": "/wynne.mp3"
     },
     {
       "id": "3",
@@ -85,7 +87,8 @@
           "description": "Buffs allies."
         }
       ],
-      "imagePath": "/butch.png"
+      "imagePath": "/butch.png",
+      "voiceLinePath": "/butch.mp3"
     },
     {
       "id": "4",
@@ -114,7 +117,8 @@
           "description": "Gains a damage boost of 20% when paired with Wild Bill."
         }
       ],
-      "imagePath": "/jane.png"
+      "imagePath": "/jane.png",
+      "voiceLinePath": "/jane.mp3"
     },
     {
       "id": "5",
@@ -143,7 +147,8 @@
           "description": "Gains a damage boost of 20% when paired with Calamity Jane."
         }
       ],
-      "imagePath": "/wildbill.png"
+      "imagePath": "/wildbill.png",
+      "voiceLinePath": "/wildbill.mp3"
     },
     {
       "id": "6",
@@ -172,7 +177,8 @@
           "description": "Deals a random amount of damage to all enemies and has a 25% chance to stun them for 1 turn."
         }
       ],
-      "imagePath": "/doc.png"
+      "imagePath": "/doc.png",
+      "voiceLinePath": "/doc.mp3"
     },
     {
       "id": "7",
@@ -201,7 +207,8 @@
           "description": "Reduces the attack of all enemies by 20% for 3 turns."
         }
       ],
-      "imagePath": "/bass.png"
+      "imagePath": "/bass.png",
+      "voiceLinePath": "/bass.mp3"
     },
     {
       "id": "8",
@@ -230,7 +237,8 @@
           "description": "Marks an enemy for 3 turns, increasing the damage they take by 20%."
         } 
       ],
-      "imagePath": "/belle.png"
+      "imagePath": "/belle.png",
+      "voiceLinePath": "/belle.mp3"
     },
     {
       "id": "9",
@@ -259,7 +267,8 @@
           "description": "Deals damage to all enemies based on the number of buffs on allies."
         }
       ],
-      "imagePath": "/beth.png"
+      "imagePath": "/beth.png",
+      "voiceLinePath": "/beth.mp3"
     },
     {
       "id": "10",
@@ -288,7 +297,8 @@
           "description": "Reduces damage taken by 10% for all allies when HP drops below 50%."
         }
       ],
-      "imagePath": "/goodnight.png"
+      "imagePath": "/goodnight.png",
+      "voiceLinePath": "/goodnight.mp3"
     }
   ]
 }
