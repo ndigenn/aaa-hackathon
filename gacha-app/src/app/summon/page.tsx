@@ -20,10 +20,10 @@ export default async function SummonPage() {
 
       <section className="relative mx-auto w-full max-w-xl px-6 pb-36 pt-28">
         <h1 className="text-center text-3xl font-extrabold text-[#ffe8b8] drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
-          Summon Banners
+          Summon Banner
         </h1>
         <p className="mt-2 text-center text-sm text-[#efd8b0] drop-shadow-[0_1px_6px_rgba(0,0,0,0.45)]">
-          Choose your banner and pull for your next top-tier cowgirl.
+          Pull from the featured banner to grow your roster.
         </p>
 
         <SummonBanners initialCoins={coins} />
