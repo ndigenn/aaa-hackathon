@@ -10,7 +10,6 @@ type UserProfileRecord = {
   username?: string;
   displayName?: string;
   coins?: number;
-  goldCoins?: number;
 };
 
 const tableName = process.env.DYNAMODB_USERS_TABLE;
@@ -105,7 +104,7 @@ export async function getTopNavProfile(returnToPath: string) {
     ? rawUsername.split("@")[0] || "New Recruit"
     : rawUsername;
 
-  const coins = Number(profile?.coins ?? profile?.goldCoins ?? 0);
+  const coins = Number(profile?.coins ?? 0);
 
   return {
     username,

@@ -63,7 +63,6 @@ export async function bootstrapUserRecord(user: Auth0User | undefined) {
           displayName: user.name ?? user.nickname ?? "New Recruit",
           picture: user.picture ?? null,
           coins: 2450,
-          goldCoins: 2450,
           createdAt: nowIso,
         },
         ConditionExpression: "attribute_not_exists(PK) AND attribute_not_exists(SK)",

@@ -26,7 +26,7 @@ export default async function SummonPage() {
           Choose your banner and pull for your next top-tier cowgirl.
         </p>
 
-        <SummonBanners />
+        <SummonBanners initialCoins={coins} />
       </section>
 
       <BottomNav activeHref="/summon" />
