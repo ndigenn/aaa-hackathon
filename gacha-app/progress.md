@@ -39,3 +39,11 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Applied the same key-schema-tolerant key resolution path for summon updates.
   - Existing list-vs-set `ownedCardIds` fallback remains; now works across non-PK/SK schemas too.
 - Validation: `npm run lint` passes after changes.
+- Audio request implemented:
+  - Added `public/door.mp3` alias by copying existing `Door Opening Sound Effect.mp3` so requested filename is available.
+  - Bottom nav now plays one-shot tab SFX on click:
+    - Summon tab -> `/door.mp3` at volume `0.30`
+    - Shop tab -> `/coin.mp3` at volume `0.45`
+  - Added `src/components/summon/summon-audio.tsx` and mounted it on summon page so `/pianoSaloon.mp3` loops while on summon page at volume `0.22`.
+  - Summon background music retries once on first pointer/key interaction if autoplay is blocked.
+- Validation: `npm run lint` passes.

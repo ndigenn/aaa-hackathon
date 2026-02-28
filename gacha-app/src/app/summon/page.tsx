@@ -1,5 +1,6 @@
 import AppTopNav from "@/components/app-top-nav";
 import BottomNav from "@/components/bottom-nav";
+import SummonAudio from "@/components/summon/summon-audio";
 import SummonBanners from "@/components/summon/summon-banners";
 import { getTopNavProfile } from "@/lib/user-profile";
 
@@ -19,6 +20,7 @@ export default async function SummonPage() {
       <AppTopNav username={username} coins={coins} />
 
       <section className="relative mx-auto w-full max-w-xl px-6 pb-36 pt-28">
+        <SummonAudio />
         <h1 className="text-center text-3xl font-extrabold text-[#ffe8b8] drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
           Summon Banner
         </h1>

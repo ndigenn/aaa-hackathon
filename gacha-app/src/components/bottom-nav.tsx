@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useCallback } from "react";
 
 type NavHref = "/home" | "/cards" | "/summon" | "/chat" | "/shop";
 
@@ -24,6 +27,17 @@ const summonItemClass =
   "relative -translate-y-4 flex h-[84px] w-full items-center justify-center rounded-full bg-transparent transition-transform hover:-translate-y-5";
 
 export default function BottomNav({ activeHref }: BottomNavProps) {
+  const handleNavClick = useCallback((href: NavHref) => {
+    const src = href === "/summon" ? "/door.mp3" : href === "/shop" ? "/coin.mp3" : null;
+    if (!src) return;
+
+    const audio = new Audio(src);
+    audio.volume = href === "/summon" ? 0.3 : 0.45;
+    void audio.play().catch(() => {
+      // Ignore autoplay/interaction failures; navigation still proceeds.
+    });
+  }, []);
+
   return (
     <nav className="fixed inset-x-0 bottom-0 z-10 px-4 pb-6">
       <div className="mx-auto grid max-w-xl grid-cols-5 items-end gap-2 rounded-2xl border border-[#f0c779]/25 bg-[linear-gradient(180deg,rgba(90,53,30,0.95)_0%,rgba(65,35,20,0.95)_100%)] p-3 shadow-[0_10px_35px_rgba(20,8,4,0.55)] backdrop-blur">
@@ -38,6 +52,7 @@ export default function BottomNav({ activeHref }: BottomNavProps) {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => handleNavClick(item.href)}
                 className={itemClass}
                 aria-label={isSummon ? "Summon" : undefined}
               >
