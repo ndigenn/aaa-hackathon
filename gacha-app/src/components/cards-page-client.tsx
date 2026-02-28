@@ -41,6 +41,14 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
     Rare: 1,
     Common: 2,
   };
+  const rarityCardTheme: Record<string, string> = {
+    "Ultra Rare":
+      "border-[#ffe5a6]/75 bg-[linear-gradient(140deg,rgba(255,74,74,0.9)_0%,rgba(255,157,66,0.88)_18%,rgba(255,228,95,0.86)_34%,rgba(96,219,104,0.85)_50%,rgba(84,199,255,0.85)_66%,rgba(121,120,255,0.87)_82%,rgba(210,118,255,0.9)_100%)]",
+    Rare:
+      "border-[#b6c8ff]/60 bg-[linear-gradient(165deg,rgba(39,50,95,0.9)_0%,rgba(60,78,130,0.88)_35%,rgba(40,31,65,0.94)_100%)]",
+    Common:
+      "border-[#d8b38a]/50 bg-[linear-gradient(165deg,rgba(86,56,35,0.9)_0%,rgba(108,72,46,0.88)_35%,rgba(56,36,24,0.94)_100%)]",
+  };
 
   const sortedCards = [...cards].sort((a, b) => {
     const rarityDiff = (rarityOrder[a.rarity] ?? 99) - (rarityOrder[b.rarity] ?? 99);
@@ -149,7 +157,8 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                         <article
                           className={`absolute inset-0 flex flex-col rounded-xl border p-3 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
                             isCardUnlocked
-                              ? "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]"
+                              ? (rarityCardTheme[card.rarity] ??
+                                "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]")
                               : "border-white/15 bg-[linear-gradient(165deg,rgba(90,90,90,0.8)_0%,rgba(70,70,70,0.88)_45%,rgba(45,45,45,0.92)_100%)] grayscale"
                           }`}
                           style={{ backfaceVisibility: "hidden" }}
@@ -227,7 +236,8 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                         <article
                           className={`absolute inset-0 flex flex-col rounded-xl border p-3 shadow-[0_12px_30px_rgba(20,8,4,0.45)] transition ${
                             isCardUnlocked
-                              ? "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]"
+                              ? (rarityCardTheme[card.rarity] ??
+                                "border-[#f0c67a]/40 bg-[linear-gradient(165deg,rgba(107,57,137,0.88)_0%,rgba(85,45,110,0.9)_35%,rgba(72,41,30,0.92)_100%)]")
                               : "border-white/15 bg-[linear-gradient(165deg,rgba(90,90,90,0.8)_0%,rgba(70,70,70,0.88)_45%,rgba(45,45,45,0.92)_100%)] grayscale"
                           }`}
                           style={{
