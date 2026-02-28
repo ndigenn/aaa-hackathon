@@ -23,10 +23,10 @@ export default function Home() {
           </Link>
 
           <Link
-            href="/guest"
-            className="w-64 text-center rounded-lg bg-white/90 px-6 py-3 text-black font-semibold hover:bg-white transition"
+            href="/login"
+            className="w-64 text-center rounded-lg bg-white/90 px-6 py-3 text-[#5c361e] font-semibold hover:bg-white transition"
           >
-            Continue as Guest
+            Log In to Existing Account
           </Link>
         </div>
       </div>
