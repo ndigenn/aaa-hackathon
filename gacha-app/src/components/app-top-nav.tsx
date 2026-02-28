@@ -17,7 +17,7 @@ export default function AppTopNav({
 }: AppTopNavProps) {
   return (
     <header
-      className={`absolute inset-x-0 top-0 flex items-center justify-center px-4 pt-6 ${className}`.trim()}
+      className={`absolute inset-x-0 top-0 z-30 flex items-center justify-center px-4 pt-6 ${className}`.trim()}
     >
       <Image
         src="/transparent_logo.png"
@@ -28,7 +28,9 @@ export default function AppTopNav({
         priority
       />
 
-      <NavUsername username={username} className="absolute left-4 top-8" />
+      <div className="absolute left-4 top-8">
+        <NavUsername username={username} />
+      </div>
       <NavGold gold={coins} className="absolute right-4 top-6" />
     </header>
   );
