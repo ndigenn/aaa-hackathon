@@ -2,7 +2,7 @@
   "cards": [
     {
       "id": "1",
-      "name": "Billy the Kid",
+      "name": "Billie - Billy the Kid",
       "type": "DPS",
       "rarity": "Ultra Rare",
       "description": "A runaway teenager turned infamous gunman outlaw involved in the Lincoln Country War, a violent feud between mercantile factions in New Mexico.",
@@ -33,7 +33,7 @@
     },
     {
       "id": "2",
-      "name": "Wyatt Earp",
+      "name": "Wynne Earp - Wyatt Earp",
       "type": "Tank",
       "rarity": "Common",
       "description": "A former pimp, thief, con artist, and gambler who ended up as a law enforcement officer renowned for winning a gunfight in the Oklahoma Corral.",
@@ -64,7 +64,7 @@
     },
     {
       "id": "3",
-      "name": "Butch Cassidy",
+      "name": "Cassia & Sunny - Butch Cassidy",
       "type": "Sub DPS",
       "rarity": "Rare",
       "description": "A nonviolent outlaw duo known for robbing trains, daring escapes, and strategic planning.",
@@ -95,7 +95,7 @@
     },
     {
       "id": "4",
-      "name": "Calamity Jane",
+      "name": "Jane - Calamity Jane",
       "type": "Sub DPS",
       "rarity": "Common",
       "description": "A orphan who became a skilled shooter, rider, performer, and partner to Wild Bill while taking care of her five younger siblings.",
@@ -126,7 +126,7 @@
     },
     {
       "id": "5",
-      "name": "Wild Bill Hickok",
+      "name": "Wild Jill -Wild Bill Hickok",
       "type": "DPS",
       "rarity": "Common",
       "description": "Renowned for his sharpshooting and bravery, where his exploits as a lawman and gambler in Kansas and Nebraska towns cemented his legendary status.",
@@ -157,7 +157,7 @@
     },
     {
       "id": "6",
-      "name": "Doc Holliday",
+      "name": "Doc Holliday - Doc Holliday",
       "type": "Healer",
       "rarity": "Common",
       "description": "A dentist, gambler, and gunfighter, not scared to start and end a fight. ",
@@ -188,7 +188,7 @@
     },
     {
       "id": "7",
-      "name": "Bass Reeves",
+      "name": "Bass Reeves - Bass Reeves",
       "type": "Debuffer",
       "rarity": "Ultra Rare",
       "description": "An impressive marshal who made up to 3,000 arrests on the most notorious of criminal, a force to not be reckoned with.",
@@ -219,7 +219,7 @@
     },
     {
       "id": "8",
-      "name": "Belle Starr",
+      "name": "Belle Starr - Belle Starr",
       "type": "DPS",
       "rarity": "Rare",
       "description": "An American outlaw and a skilled shooter, she's a reaper dressed in black ready to strike.",
@@ -250,7 +250,7 @@
     },
     {
       "id": "9",
-      "name": "Black Bart",
+      "name": "Black Beth - Black Bart",
       "type": "Support",
       "rarity": "Rare",
       "description": "A gentleman bandit known for his poetic verses left at the scenes of his crimes, a charismatic figure in the Old West.",
@@ -281,7 +281,7 @@
     },
     {
       "id": "10",
-      "name": "Charles Goodnight",
+      "name": "Charlie Goodnight - Charles Goodnight",
       "type": "Support",
       "rarity": "Common",
       "description": "A legendary cattle rancher and trailblazer, known for his pioneering spirit and contributions to the development of the American West.",
