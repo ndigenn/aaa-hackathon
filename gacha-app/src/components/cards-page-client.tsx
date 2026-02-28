@@ -256,7 +256,7 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                               >
                                 History
                               </button>
-                              <div className="pointer-events-none invisible absolute bottom-full right-0 z-50 mb-2 w-64 max-h-56 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition group-hover:visible group-hover:opacity-100">
+                              <div className="pointer-events-none invisible absolute bottom-full right-0 z-50 mb-2 w-80 max-h-56 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_8px_24px_rgba(0,0,0,0.45)] transition group-hover:visible group-hover:opacity-100">
                                 <p className="mb-2 text-xs font-bold uppercase tracking-[0.08em] text-[#f4cd84]">
                                   History Details
                                 </p>
