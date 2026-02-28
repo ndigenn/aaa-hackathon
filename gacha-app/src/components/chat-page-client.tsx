@@ -11,34 +11,63 @@ type ChatMessage = {
   time?: string;
 };
 
-const CHANNELS = ["Global", "Guild", "Trade", "Support"];
+type OwnedCardOption = {
+  id: string;
+  name: string;
+};
 
 type ChatPageClientProps = {
   username: string;
   coins: number;
+  ownedCards: OwnedCardOption[];
 };
 
-export default function ChatPageClient({ username, coins }: ChatPageClientProps) {
-  const [channel, setChannel] = useState(CHANNELS[0]);
+function createStarterMessages(cardName: string): ChatMessage[] {
+  return [
+    { id: `${cardName}-1`, author: "other", text: `Howdy, partner. ${cardName} reporting in.` },
+    { id: `${cardName}-2`, author: "other", text: "What are we ridin' into next?" },
+  ];
+}
+
+export default function ChatPageClient({ username, coins, ownedCards }: ChatPageClientProps) {
+  const [selectedCardId, setSelectedCardId] = useState(ownedCards[0]?.id ?? "");
+  const selectedCard = useMemo(
+    () => ownedCards.find((card) => card.id === selectedCardId) ?? null,
+    [ownedCards, selectedCardId],
+  );
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { id: "1", author: "other", text: "Howdy, partner" },
-    { id: "2", author: "me", text: "Yo! Anyone pulling on the new banner?" },
-    { id: "3", author: "other", text: "Saving my gold for the next rotation." },
+    ...createStarterMessages(ownedCards[0]?.name ?? "Your card"),
   ]);
 
   const listRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setSelectedCardId((current) => {
+      if (current && ownedCards.some((card) => card.id === current)) return current;
+      return ownedCards[0]?.id ?? "";
+    });
+  }, [ownedCards]);
+
+  useEffect(() => {
+    if (!selectedCard) {
+      setMessages([]);
+      return;
+    }
+
+    setMessages(createStarterMessages(selectedCard.name));
+  }, [selectedCard]);
 
   useEffect(() => {
     if (!listRef.current) return;
     listRef.current.scrollTop = listRef.current.scrollHeight;
   }, [messages.length]);
 
-  const canSend = useMemo(() => input.trim().length > 0, [input]);
+  const canSend = useMemo(() => input.trim().length > 0 && Boolean(selectedCard), [input, selectedCard]);
 
   async function sendMessage() {
-    if (!canSend || isSending) return;
+    if (!canSend || isSending || !selectedCard) return;
     const messageText = input.trim();
     const newMsg: ChatMessage = {
       id: crypto.randomUUID(),
@@ -56,7 +85,7 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          channel,
+          channel: selectedCard?.name ?? "Companion",
           message: messageText,
         }),
       });
@@ -122,17 +151,22 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
               <div className="font-extrabold uppercase tracking-[0.12em] text-[#f9dfa8]">Saloon Chat</div>
 
               <label className="flex items-center gap-2 text-sm text-[#f4d4a0]">
-                <span className="opacity-90">Channel</span>
+                <span className="opacity-90">Card</span>
                 <select
-                  value={channel}
-                  onChange={(e) => setChannel(e.target.value)}
+                  value={selectedCardId}
+                  onChange={(e) => setSelectedCardId(e.target.value)}
+                  disabled={ownedCards.length === 0}
                   className="rounded-lg border border-[#f0c67a]/65 bg-[#2f1a11]/90 px-3 py-2 text-[#ffe7b9] outline-none focus:ring-2 focus:ring-[#d7a744]"
                 >
-                  {CHANNELS.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
+                  {ownedCards.length === 0 ? (
+                    <option value="">No owned cards</option>
+                  ) : (
+                    ownedCards.map((card) => (
+                      <option key={card.id} value={card.id}>
+                        {card.name}
+                      </option>
+                    ))
+                  )}
                 </select>
               </label>
             </div>
@@ -151,7 +185,8 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onKeyDown}
-                  placeholder={`Message ${channel}...`}
+                  placeholder={selectedCard ? `Message ${selectedCard.name}...` : "Own a card to start chatting..."}
+                  disabled={!selectedCard}
                   className="w-full rounded-lg border border-[#f0c67a]/60 bg-[#2f1a11]/90 px-3 py-3 text-[#f8e9c6] placeholder:text-[#d5b98a] outline-none focus:ring-2 focus:ring-[#d7a744]"
                 />
                 <button
