@@ -73,19 +73,39 @@ async function findUserRecord(client: DynamoDBDocumentClient, userId: string) {
     new ScanCommand({
       TableName: tableName,
       FilterExpression:
-        "(userId = :userId OR #sub = :userId OR id = :userId) AND (attribute_not_exists(SK) OR SK = :profileSk)",
+        "(userId = :userId OR #sub = :userId OR id = :userId OR PK = :pk) AND (attribute_not_exists(SK) OR SK = :profileSk OR begins_with(SK, :profilePrefix))",
       ExpressionAttributeNames: {
         "#sub": "sub",
       },
       ExpressionAttributeValues: {
         ":userId": userId,
+        ":pk": `USER#${userId}`,
         ":profileSk": "PROFILE",
+        ":profilePrefix": "PROFILE",
       },
-      Limit: 1,
+      Limit: 25,
     }),
   );
 
-  return (scanResponse.Items?.[0] ?? null) as UserRecord | null;
+  const items = (scanResponse.Items ?? []) as UserRecord[];
+  if (items.length === 0) {
+    return null;
+  }
+
+  const exactProfile = items.find((item) => item.SK === "PROFILE");
+  if (exactProfile) {
+    return exactProfile;
+  }
+
+  const profileLike = items.find(
+    (item) =>
+      typeof item.SK === "string" && item.SK.toUpperCase().startsWith("PROFILE"),
+  );
+  if (profileLike) {
+    return profileLike;
+  }
+
+  return items[0] ?? null;
 }
 
 function buildKeyCandidates(record: UserRecord) {
