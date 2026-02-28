@@ -15,7 +15,7 @@ type Card = {
   unlocked: boolean;
   imagePath?: string;
   voiceLinePath?: string;
-  history?: string;
+  history?: string | string[];
   abilities: {
     name: string;
     type: string;
@@ -50,6 +50,24 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
   const visibleCards = sortedCards.filter(
     (card) => card.unlocked || ownedCardIdSet.has(card.id),
   );
+
+  function getHistoryEntries(card: Card) {
+    if (Array.isArray(card.history)) {
+      return card.history.length > 0
+        ? card.history
+        : [
+            "This outlaw's legend spread across saloons and frontier towns, earning a feared reputation that still echoes through the West.",
+          ];
+    }
+
+    if (typeof card.history === "string" && card.history.trim().length > 0) {
+      return [card.history];
+    }
+
+    return [
+      "This outlaw's legend spread across saloons and frontier towns, earning a feared reputation that still echoes through the West.",
+    ];
+  }
 
   function playVoiceLine(voiceLinePath?: string) {
     if (!voiceLinePath) return;
@@ -227,10 +245,19 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                           <p className="mt-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
                             History
                           </p>
-                          <p className="mt-3 text-sm text-[#efd8b0]">
-                            {card.history ??
-                              "This outlaw's legend spread across saloons and frontier towns, earning a feared reputation that still echoes through the West."}
-                          </p>
+                          <div className="mt-3 space-y-2 text-xs text-[#efd8b0]">
+                            {getHistoryEntries(card).map((entry, index) => (
+                              <div
+                                key={`${card.id}-history-${index}`}
+                                className="rounded-md border border-white/10 bg-black/20 p-2"
+                              >
+                                <p>
+                                  <span className="font-semibold">Entry:</span>{" "}
+                                  {entry}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
                           <p className="mt-4 text-xs font-semibold uppercase tracking-[0.12em] text-[#f4cd84]">
                             Click to flip back
                           </p>
