@@ -64,8 +64,8 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
       <div className="relative flex min-h-screen flex-col">
         <AppTopNav username={username} coins={coins} className="pt-2" />
 
-        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-28">
-          <section className="mx-auto max-w-3xl rounded-[26px] border-2 border-[#f0c67a]/60 bg-[linear-gradient(165deg,rgba(52,29,18,0.86)_0%,rgba(42,24,15,0.9)_50%,rgba(33,20,12,0.94)_100%)] shadow-[0_22px_55px_rgba(18,8,5,0.6)] backdrop-blur-[2px]">
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-24 pt-32">
+          <section className="mx-auto max-w-4xl rounded-[26px] border-2 border-[#f0c67a]/60 bg-[linear-gradient(165deg,rgba(52,29,18,0.86)_0%,rgba(42,24,15,0.9)_50%,rgba(33,20,12,0.94)_100%)] shadow-[0_22px_55px_rgba(18,8,5,0.6)] backdrop-blur-[2px]">
             <div className="flex items-center justify-between border-b border-[#f0c67a]/35 px-4 py-3">
               <div className="font-extrabold uppercase tracking-[0.12em] text-[#f9dfa8]">Saloon Chat</div>
 
@@ -85,7 +85,7 @@ export default function ChatPageClient({ username, coins }: ChatPageClientProps)
               </label>
             </div>
 
-            <div ref={listRef} className="h-[420px] overflow-y-auto bg-[linear-gradient(180deg,rgba(25,14,9,0.38)_0%,rgba(25,14,9,0.2)_100%)] px-4 py-4">
+            <div ref={listRef} className="h-[340px] overflow-y-auto bg-[linear-gradient(180deg,rgba(25,14,9,0.38)_0%,rgba(25,14,9,0.2)_100%)] px-4 py-4">
               <div className="flex flex-col gap-3">
                 {messages.map((m) => (
                   <MessageRow key={m.id} msg={m} />
