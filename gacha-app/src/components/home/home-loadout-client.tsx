@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type InventoryCard = {
   id: string;
@@ -18,6 +19,7 @@ type HomeLoadoutClientProps = {
 export default function HomeLoadoutClient({
   inventoryCards,
 }: HomeLoadoutClientProps) {
+  const router = useRouter();
   const [loadout, setLoadout] = useState<Array<InventoryCard | null>>([
     null,
     null,
@@ -47,6 +49,20 @@ export default function HomeLoadoutClient({
       next[slotIndex] = null;
       return next;
     });
+  }
+
+  function startBattle() {
+    const selectedIds = loadout
+      .filter((card): card is InventoryCard => Boolean(card))
+      .map((card) => card.id);
+
+    if (selectedIds.length < 3) {
+      setBattleMessage("Select 3 cards in your loadout to start battle.");
+      return;
+    }
+
+    setBattleMessage(null);
+    router.push(`/battle?loadout=${selectedIds.join(",")}`);
   }
 
   return (
@@ -140,9 +156,7 @@ export default function HomeLoadoutClient({
 
           <button
             type="button"
-            onClick={() =>
-              setBattleMessage("Battle gameplay is coming soon. Your team setup is saved locally for now.")
-            }
+            onClick={startBattle}
             className="mt-5 w-full rounded-xl border border-[#ffe3a6]/80 bg-[linear-gradient(180deg,#ffdf95_0%,#d6a43d_100%)] px-4 py-3 text-sm font-extrabold uppercase tracking-[0.08em] text-[#4a2b16] transition hover:brightness-105"
           >
             Battle

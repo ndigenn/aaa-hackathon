@@ -73,3 +73,21 @@ Original prompt: Can you add the summonpage.png to the background of the summon 
   - Duplicate behavior: charge 500, keep ownership unchanged.
   - Non-duplicate behavior: charge 1000, append/add ownership.
 - Validation: `npm run lint` passes.
+- New feature: implemented simple 3v3 battle system.
+- Added new route `src/app/battle/page.tsx` and client battlefield `src/components/battle/battle-page-client.tsx`.
+- Battle flow:
+  - Uses 3 selected player cards (from `loadout` query string) vs 3 generic enemy cards.
+  - Player phase: drag player cards onto enemy cards (or select + click target) to attack.
+  - Each living player card acts once per turn.
+  - Enemy phase: living enemies auto-attack random living player units.
+  - Win/loss detection, battle log, reset button, and turn counter included.
+- Basic card abilities added by card type:
+  - `Healer`: heals lowest ally on attack.
+  - `Support`: buffs ally attack.
+  - `Debuffer`: applies vulnerable to target.
+  - `Tank`: reduced damage but self-heal.
+  - `DPS/Sub DPS`: deterministic crit-trigger burst strike.
+- Hooked Home loadout battle button to open `/battle?loadout=<id,id,id>` with guard when fewer than 3 cards selected (`src/components/home/home-loadout-client.tsx`).
+- Validation:
+  - `npm run lint` passes.
+  - Playwright smoke run executed for `/battle`; environment redirects to Auth0 login here, so direct in-battle visual validation was blocked in this environment.
