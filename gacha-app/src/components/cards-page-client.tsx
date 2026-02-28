@@ -127,7 +127,7 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
             </p>
           ) : (
             <div className="mt-5 rounded-2xl border border-[#f2cb74]/45 bg-[#2f1b10]/55 p-2.5 shadow-[0_8px_24px_rgba(0,0,0,0.28)]">
-            <div className="relative max-h-[62vh] min-h-[360px] overflow-y-auto rounded-xl border border-[#f2cb74]/35 bg-[linear-gradient(180deg,rgba(36,20,12,0.55)_0%,rgba(28,16,10,0.45)_100%)] p-2 pr-2 [scrollbar-color:#d7a744_#3b2417] [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-[#3b2417]/90 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-[#3b2417] [&::-webkit-scrollbar-thumb]:bg-[linear-gradient(180deg,#f3d197_0%,#c4883d_100%)] [&::-webkit-scrollbar-thumb:hover]:bg-[linear-gradient(180deg,#f8deaa_0%,#d29748_100%)] sm:max-h-[58vh]">
+            <div className="relative max-h-[62vh] min-h-[360px] overflow-y-auto rounded-xl border border-[#f2cb74]/35 bg-[linear-gradient(180deg,rgba(36,20,12,0.55)_0%,rgba(28,16,10,0.45)_100%)] p-2 pr-2 pb-24 [scrollbar-color:#d7a744_#3b2417] [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-[#3b2417]/90 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-[#3b2417] [&::-webkit-scrollbar-thumb]:bg-[linear-gradient(180deg,#f3d197_0%,#c4883d_100%)] [&::-webkit-scrollbar-thumb:hover]:bg-[linear-gradient(180deg,#f8deaa_0%,#d29748_100%)] sm:max-h-[58vh]">
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {visibleCards.map((card) => {
                   const isCardUnlocked = card.unlocked || ownedCardIdSet.has(card.id);
@@ -263,7 +263,7 @@ export default function CardsPage({ username, coins, ownedCardIds }: CardsPagePr
                               >
                                 History
                               </button>
-                              <div className="pointer-events-none invisible absolute bottom-12 left-3 right-3 z-[9999] max-h-64 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_12px_30px_rgba(0,0,0,0.55)] transition group-hover:visible group-hover:opacity-100">
+                              <div className="invisible absolute bottom-12 left-3 right-3 z-[9999] max-h-64 overflow-y-auto rounded-lg border border-[#f2cd86]/35 bg-[#2b1a35]/95 p-3 opacity-0 shadow-[0_12px_30px_rgba(0,0,0,0.55)] transition group-hover:visible group-hover:opacity-100">
                                 <p className="mb-2 text-xs font-bold uppercase tracking-[0.08em] text-[#f4cd84]">
                                   History Details
                                 </p>
