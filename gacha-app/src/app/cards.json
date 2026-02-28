@@ -94,7 +94,7 @@
       "id": "4",
       "name": "Calamity Jane",
       "type": "Sub DPS",
-      "rarity": "Ultra Rare",
+      "rarity": "Common",
       "description": "A orphan who became a skilled shooter, rider, performer, and partner to Wild Bill while taking care of her five younger siblings.",
       "unlocked": false,
       "stats": {
@@ -124,7 +124,7 @@
       "id": "5",
       "name": "Wild Bill Hickok",
       "type": "DPS",
-      "rarity": "Rare",
+      "rarity": "Common",
       "description": "Renowned for his sharpshooting and bravery, where his exploits as a lawman and gambler in Kansas and Nebraska towns cemented his legendary status.",
       "unlocked": false,
       "stats": {
@@ -235,7 +235,7 @@
           "type": "Passive",
           "cooldown": null,
           "description": "Marks an enemy for 3 turns, increasing the damage they take by 20%."
-        } 
+        }
       ],
       "imagePath": "/belle.png",
       "voiceLinePath": "/belle.mp3"
