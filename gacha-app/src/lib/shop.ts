@@ -72,12 +72,14 @@ async function findUserRecord(client: DynamoDBDocumentClient, userId: string) {
   const scanResponse = await client.send(
     new ScanCommand({
       TableName: tableName,
-      FilterExpression: "userId = :userId OR #sub = :userId OR id = :userId",
+      FilterExpression:
+        "(userId = :userId OR #sub = :userId OR id = :userId) AND (attribute_not_exists(SK) OR SK = :profileSk)",
       ExpressionAttributeNames: {
         "#sub": "sub",
       },
       ExpressionAttributeValues: {
         ":userId": userId,
+        ":profileSk": "PROFILE",
       },
       Limit: 1,
     }),
@@ -177,12 +179,10 @@ export async function addCoinsToUser(userId: string, amount: number) {
       nowIso,
     );
   } catch (error) {
-    if (isConditionalCheckFailed(error)) {
-      throw new ShopError("USER_NOT_FOUND", "User profile not found.");
-    }
-
     if (!isValidationException(error)) {
-      throw error;
+      if (!isConditionalCheckFailed(error)) {
+        throw error;
+      }
     }
   }
 

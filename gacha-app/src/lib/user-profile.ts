@@ -49,6 +49,26 @@ async function getUserProfileById(userId: string | undefined) {
     return null;
   }
 
+  const lookupByScan = async () => {
+    const scanResponse = await client.send(
+      new ScanCommand({
+        TableName: tableName,
+        FilterExpression:
+          "(userId = :userId OR #sub = :userId OR id = :userId) AND (attribute_not_exists(SK) OR SK = :profileSk)",
+        ExpressionAttributeNames: {
+          "#sub": "sub",
+        },
+        ExpressionAttributeValues: {
+          ":userId": userId,
+          ":profileSk": "PROFILE",
+        },
+        Limit: 1,
+      }),
+    );
+
+    return (scanResponse.Items?.[0] ?? null) as UserProfileRecord | null;
+  };
+
   try {
     const response = await client.send(
       new GetCommand({
@@ -61,7 +81,11 @@ async function getUserProfileById(userId: string | undefined) {
       }),
     );
 
-    return (response.Item ?? null) as UserProfileRecord | null;
+    if (response.Item) {
+      return response.Item as UserProfileRecord;
+    }
+
+    return await lookupByScan();
   } catch (error) {
     if (
       typeof error === "object" &&
@@ -69,21 +93,7 @@ async function getUserProfileById(userId: string | undefined) {
       "name" in error &&
       error.name === "ValidationException"
     ) {
-      const scanResponse = await client.send(
-        new ScanCommand({
-          TableName: tableName,
-          FilterExpression: "userId = :userId OR #sub = :userId OR id = :userId",
-          ExpressionAttributeNames: {
-            "#sub": "sub",
-          },
-          ExpressionAttributeValues: {
-            ":userId": userId,
-          },
-          Limit: 1,
-        }),
-      );
-
-      return (scanResponse.Items?.[0] ?? null) as UserProfileRecord | null;
+      return await lookupByScan();
     }
 
     throw error;
