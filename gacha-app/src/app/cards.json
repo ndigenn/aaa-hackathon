@@ -147,7 +147,7 @@
     },
     {
       "id": "6",
-      "name": "Doc Holiday",
+      "name": "Doc Holliday",
       "type": "Healer",
       "rarity": "Common",
       "description": "A dentist, gambler, and gunfighter, not scared to start and end a fight. ",
@@ -176,7 +176,7 @@
     },
     {
       "id": "7",
-      "name": "Bass Reaves",
+      "name": "Bass Reeves",
       "type": "Debuffer",
       "rarity": "Ultra Rare",
       "description": "An impressive marshal who made up to 3,000 arrests on the most notorious of criminal, a force to not be reckoned with.",
