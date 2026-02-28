@@ -67,7 +67,7 @@ export default function HomeLoadoutClient({
 
   return (
     <>
-      <section className="relative mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 gap-6 px-4 pb-32 pt-28 lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="relative mx-auto grid min-h-screen w-full max-w-6xl grid-cols-1 items-start gap-6 px-4 pb-32 pt-28 lg:grid-cols-[1.05fr_0.95fr]">
         <div className="rounded-2xl border border-[#f1cf8e]/40 bg-[#22160f]/55 p-5 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur-[1px]">
           <p className="text-xs uppercase tracking-[0.2em] text-[#f2cb84]">
             Team Loadout
