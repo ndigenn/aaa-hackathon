@@ -85,7 +85,8 @@ export default function ChatPageClient({ username, coins, ownedCards }: ChatPage
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          channel: selectedCard?.name ?? "Companion",
+          cardName: selectedCard.name,
+          channel: selectedCard.name,
           message: messageText,
         }),
       });
