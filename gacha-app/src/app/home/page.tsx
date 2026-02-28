@@ -1,8 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import BottomNav from "@/components/bottom-nav";
+import NavGold from "@/components/nav-gold";
+import NavUsername from "@/components/nav-username";
 
 export default function HomePage() {
+  const username = "Username";
+  const gold = 2450;
+
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] text-[#f8e9c6]">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(255,215,140,0.12)_0%,rgba(91,47,26,0.2)_50%,rgba(44,26,16,0.45)_100%)]" />
@@ -18,12 +23,8 @@ export default function HomePage() {
           priority
         />
 
-        <div className="absolute right-4 top-6 flex items-center gap-2 rounded-full border border-[#f2cb74]/60 bg-[#4d3018]/90 px-3 py-1.5 shadow-[0_0_18px_rgba(255,210,120,0.2)]">
-          <span className="inline-block h-3 w-3 rounded-full bg-[#f3c45a] shadow-[0_0_10px_rgba(243,196,90,0.85)]" />
-          <span className="text-sm font-bold tracking-wide text-[#ffe5ac]">
-            2,450
-          </span>
-        </div>
+        <NavUsername username={username} className="absolute left-4 top-8" />
+        <NavGold gold={gold} className="absolute right-4 top-6" />
       </header>
 
       <section className="relative mx-auto flex min-h-screen w-full max-w-xl flex-col items-center justify-center px-6 pb-36 pt-28">

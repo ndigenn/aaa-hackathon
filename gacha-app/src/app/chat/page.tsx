@@ -3,6 +3,8 @@
 import { useMemo, useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import BottomNav from "@/components/bottom-nav";
+import NavGold from "@/components/nav-gold";
+import NavUsername from "@/components/nav-username";
 
 type ChatMessage = {
     id: string;
@@ -61,9 +63,7 @@ export default function ChatPage() {
                 <header className="w-full border-b border-amber-900/30 bg-white/70 backdrop-blur-sm">
                     <div className="mx-auto max-w-[90rem] px-2 py-3 sm:px-3 md:px-4">
                         <div className="relative flex items-center justify-center">
-                            <div className="absolute -left-4 font-semibold text-amber-900 sm:-left-32">
-                                {username}
-                            </div>
+                            <NavUsername username={username} className="absolute -left-4 sm:-left-30" />
 
                             <Image
                                 src="/transparent_logo.png"
@@ -74,9 +74,7 @@ export default function ChatPage() {
                                 priority
                             />
 
-                            <div className="absolute -right-4 font-semibold text-amber-900 sm:-right-32">
-                                Gold: <span className="tabular-nums">{gold.toLocaleString()}</span>
-                            </div>
+                            <NavGold gold={gold} className="absolute -right-4 sm:-right-30" />
                         </div>
                     </div>
                 </header>
