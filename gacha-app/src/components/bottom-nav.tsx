@@ -38,7 +38,7 @@ export default function BottomNav({ activeHref }: BottomNavProps) {
   }, []);
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-20 px-3 pb-5 sm:px-4 sm:pb-6">
+    <nav className="fixed inset-x-0 bottom-0 z-[10001] px-3 pb-5 sm:px-4 sm:pb-6">
       <div className="mx-auto max-w-xl">
         <div className="relative">
           <div className="pointer-events-none absolute -inset-x-2 -top-3 h-16 rounded-[26px] bg-[radial-gradient(circle_at_50%_0%,rgba(248,200,106,0.25)_0%,rgba(248,200,106,0)_70%)]" />
