@@ -7,12 +7,9 @@ export default function SignUpPage() {
     const [form, setForm] = useState({
         username: "",
         email: "",
-        password: "",
-        confirmPassword: "",
     });
 
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,20 +18,17 @@ export default function SignUpPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        setSuccess(false);
+        const params = new URLSearchParams({
+            returnTo: "/home",
+            screen_hint: "signup",
+        });
 
-        if (form.password !== form.confirmPassword) {
-            setError("Passwords do not match.");
-            return;
+        const loginHint = form.email.trim();
+        if (loginHint) {
+            params.set("login_hint", loginHint);
         }
 
-        if (form.password.length < 6) {
-            setError("Password must be at least 6 characters.");
-            return;
-        }
-
-        console.log("User signed up:", form);
-        setSuccess(true);
+        window.location.href = `/auth/login?${params.toString()}`;
     };
 
     return (
@@ -68,7 +62,6 @@ export default function SignUpPage() {
                         type="text"
                         name="username"
                         placeholder="Username"
-                        required
                         onChange={handleChange}
                         className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
                     />
@@ -77,25 +70,6 @@ export default function SignUpPage() {
                         type="email"
                         name="email"
                         placeholder="Email"
-                        required
-                        onChange={handleChange}
-                        className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
-                    />
-
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        required
-                        onChange={handleChange}
-                        className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
-                    />
-
-                    <input
-                        type="password"
-                        name="confirmPassword"
-                        placeholder="Confirm Password"
-                        required
                         onChange={handleChange}
                         className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
                     />
@@ -104,17 +78,11 @@ export default function SignUpPage() {
                         <p className="text-red-600 text-sm">{error}</p>
                     )}
 
-                    {success && (
-                        <p className="text-green-600 text-sm">
-                            Account created successfully!
-                        </p>
-                    )}
-
                     <button
                         type="submit"
                         className="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 rounded-lg transition shadow-md"
                     >
-                        Saddle Up
+                        Continue to Auth0
                     </button>
                 </form>
 

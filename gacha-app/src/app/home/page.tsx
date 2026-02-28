@@ -1,12 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import BottomNav from "@/components/bottom-nav";
-import NavGold from "@/components/nav-gold";
-import NavUsername from "@/components/nav-username";
+import { requireAuthenticatedUser } from "@/lib/server-auth";
 
-export default function HomePage() {
-  const username = "Username";
-  const gold = 2450;
+export default async function HomePage() {
+  await requireAuthenticatedUser("/home");
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,#5a2d72_0%,#3b1f4f_45%,#2a1733_70%,#22180f_100%)] text-[#f8e9c6]">

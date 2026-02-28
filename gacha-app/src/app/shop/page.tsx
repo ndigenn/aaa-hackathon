@@ -1,4 +1,5 @@
 import BottomNav from "@/components/bottom-nav";
+import { requireAuthenticatedUser } from "@/lib/server-auth";
 
 type CoinPack = {
   name: string;
@@ -32,7 +33,9 @@ const coinPacks: CoinPack[] = [
   },
 ];
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  await requireAuthenticatedUser("/shop");
+
   return (
     <main className="min-h-screen bg-[radial-gradient(circle_at_top,#4d2f17_0%,#2e1c0f_45%,#191107_100%)] px-4 pb-32 pt-10 text-[#f8e9c6]">
       <section className="mx-auto w-full max-w-5xl">

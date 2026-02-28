@@ -1,15 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 
 export default function LoginPage() {
     const [form, setForm] = useState({
         emailOrUsername: "",
-        password: "",
     });
 
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,16 +17,17 @@ export default function LoginPage() {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        setSuccess(false);
+        const params = new URLSearchParams({
+            returnTo: "/home",
+            prompt: "login",
+        });
 
-        if (!form.emailOrUsername.trim() || !form.password) {
-            setError("Please enter your login details.");
-            return;
+        const loginHint = form.emailOrUsername.trim();
+        if (loginHint) {
+            params.set("login_hint", loginHint);
         }
 
-        // Replace with your API call later
-        console.log("Login:", form);
-        setSuccess(true);
+        window.location.href = `/auth/login?${params.toString()}`;
     };
 
     return (
@@ -38,12 +38,15 @@ export default function LoginPage() {
 
             {/* Card */}
             <div className="relative bg-white/95 backdrop-blur-sm p-10 rounded-2xl shadow-2xl w-full max-w-md border-4 border-amber-700">
-                {/* Logo (use <img> to avoid Next Image setup issues) */}
+                {/* Logo */}
                 <div className="flex justify-center mb-6">
-                    <img
+                    <Image
                         src="/logo.png"
                         alt="AraAra Alliance Logo"
-                        className="w-72 h-auto"
+                        width={288}
+                        height={120}
+                        className="h-auto w-72"
+                        priority
                     />
                 </div>
 
@@ -56,36 +59,22 @@ export default function LoginPage() {
                         type="text"
                         name="emailOrUsername"
                         placeholder="Email or Username"
-                        required
-                        onChange={handleChange}
-                        className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
-                    />
-
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        required
                         onChange={handleChange}
                         className="w-full p-3 rounded-lg border border-amber-500 focus:ring-2 focus:ring-amber-600 outline-none"
                     />
 
                     {error && <p className="text-red-600 text-sm">{error}</p>}
 
-                    {success && (
-                        <p className="text-green-600 text-sm">Logged in successfully!</p>
-                    )}
-
                     <button
                         type="submit"
                         className="w-full bg-amber-700 hover:bg-amber-800 text-white font-bold py-3 rounded-lg transition shadow-md"
                     >
-                        Enter the Saloon
+                        Continue to Auth0
                     </button>
                 </form>
 
                 <div className="flex justify-between items-center mt-4 text-sm text-amber-900">
-                    <a href="/forgot-password" className="underline">
+                    <a href="/auth/login" className="underline">
                         Forgot password?
                     </a>
                     <a href="/signup" className="underline font-medium">
